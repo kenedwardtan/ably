@@ -21,6 +21,12 @@
 	],
 	"main": "./client/out/extension",
 	"contributes": {
+		"commands": [
+			{
+				"command": "exampleApp.openWebview",
+				"title": "Open webview"
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "Example configuration",
@@ -47,7 +53,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -b",
+		"compile": "tsc -watch -p ./",
 		"watch": "tsc -b -w",
 		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
@@ -61,5 +67,8 @@
 		"eslint": "^8.13.0",
 		"mocha": "^9.2.1",
 		"typescript": "^4.8.4"
+	},
+	"dependencies": {
+		"vscode": "^1.1.37"
 	}
 }

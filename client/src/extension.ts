@@ -13,9 +13,28 @@ import {
 	TransportKind,
 } from 'vscode-languageclient/node';
 
+import * as vscode from 'vscode';
+
+
+
+
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
+	
+	const openWebview = vscode.commands.registerCommand('exampleApp.openWebview', () => {
+		const panel = vscode.window.createWebviewPanel(
+			'openWebview', 
+			'Ably - Diagnostic Panel', 
+			vscode.ViewColumn.One, 
+			{ 
+				enableScripts: true 
+			}
+		);
+		panel.webview.html = getWebviewContent();
+	});
+	context.subscriptions.push(openWebview);
+	
 	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
 	// The debug options for the server
@@ -55,6 +74,25 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 }
+function getWebviewContent() {
+	return `<!DOCTYPE html>
+  <html lang="en">
+  <head>
+	  <meta charset="UTF-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <title>Ably</title>
+  </head>
+  <body>
+	<h1> Ably </h1> 
+	<h2>Diagnostic Panel</h2>
+	<h4> Errors in code: </h4>
+
+	  
+  </body>
+  </html>`;
+  }
+
+  
 
 export function deactivate(): Thenable<void> | undefined {
 	if (!client) {
