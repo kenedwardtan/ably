@@ -441,7 +441,7 @@ async function validateTextDocument(textDocument) {
 						uri: textDocument.uri,
 						range: Object.assign({}, diagnostic.range),
 					},
-					message: 'Please change this to <form>',
+					message: 'Please change this to <form>.',
 				},
 			];
 		}
