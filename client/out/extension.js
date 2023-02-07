@@ -7,17 +7,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const path = require("path");
 const vscode_1 = require("vscode");
-const node_1 = require("vscode-languageclient/node");
 const vscode = require("vscode");
+const node_1 = require("vscode-languageclient/node");
 let client;
 function activate(context) {
-    const openWebview = vscode.commands.registerCommand('exampleApp.openWebview', () => {
-        const panel = vscode.window.createWebviewPanel('openWebview', 'Ably - Diagnostic Panel', vscode.ViewColumn.One, {
-            enableScripts: true
-        });
-        panel.webview.html = getWebviewContent();
-    });
-    context.subscriptions.push(openWebview);
+    const provider = new ColorsViewProvider(context.extensionUri);
+    context.subscriptions.push(vscode.window.registerWebviewViewProvider(ColorsViewProvider.viewType, provider));
     // The server is implemented in node
     const serverModule = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
     // The debug options for the server
@@ -49,23 +44,56 @@ function activate(context) {
     client.start();
 }
 exports.activate = activate;
-function getWebviewContent() {
-    return `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-	  <meta charset="UTF-8">
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <title>Ably</title>
-  </head>
-  <body>
-	<h1> Ably </h1> 
-	<h2>Diagnostic Panel</h2>
-	<h4> Errors in code: </h4>
+class ColorsViewProvider {
+    constructor(_extensionUri) {
+        this._extensionUri = _extensionUri;
+    }
+    resolveWebviewView(webviewView, context, _token) {
+        this._view = webviewView;
+        webviewView.webview.options = {
+            // Allow scripts in the webview
+            enableScripts: true,
+            localResourceRoots: [
+                this._extensionUri
+            ]
+        };
+        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+        webviewView.webview.onDidReceiveMessage(data => {
+            switch (data.type) {
+                case 'colorSelected':
+                    {
+                        vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
+                        break;
+                    }
+            }
+        });
+    }
+    _getHtmlForWebview(webview) {
+        // Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
+        //	const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+        const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+        const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+        // Do the same for the stylesheet.
+        const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
+        const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
+        return `<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+				<link href="${styleMainUri}" rel="stylesheet">
 
-	  
-  </body>
-  </html>`;
+				<title>Cat Colors</title>
+			</head>
+			<body>
+				<h1> Ably: Accessibility Helper </h1>
+				<p> Try </p>
+			</body>
+			</html>`;
+    }
 }
+ColorsViewProvider.viewType = 'calicoColors.colorsView';
 function deactivate() {
     if (!client) {
         return undefined;

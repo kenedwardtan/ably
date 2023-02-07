@@ -5,6 +5,8 @@
 
 import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
+import * as vscode from 'vscode';
+
 
 import {
 	LanguageClient,
@@ -13,27 +15,16 @@ import {
 	TransportKind,
 } from 'vscode-languageclient/node';
 
-import * as vscode from 'vscode';
-
-
-
-
 let client: LanguageClient;
 
-export function activate(context: ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
 	
-	const openWebview = vscode.commands.registerCommand('exampleApp.openWebview', () => {
-		const panel = vscode.window.createWebviewPanel(
-			'openWebview', 
-			'Ably - Diagnostic Panel', 
-			vscode.ViewColumn.One, 
-			{ 
-				enableScripts: true 
-			}
-		);
-		panel.webview.html = getWebviewContent();
-	});
-	context.subscriptions.push(openWebview);
+	const provider = new ColorsViewProvider(context.extensionUri);
+
+
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(ColorsViewProvider.viewType, provider));
+
 	
 	// The server is implemented in node
 	const serverModule = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
@@ -74,23 +65,72 @@ export function activate(context: ExtensionContext) {
 	// Start the client. This will also launch the server
 	client.start();
 }
-function getWebviewContent() {
-	return `<!DOCTYPE html>
-  <html lang="en">
-  <head>
-	  <meta charset="UTF-8">
-	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	  <title>Ably</title>
-  </head>
-  <body>
-	<h1> Ably </h1> 
-	<h2>Diagnostic Panel</h2>
-	<h4> Errors in code: </h4>
 
-	  
-  </body>
-  </html>`;
-  }
+class ColorsViewProvider implements vscode.WebviewViewProvider {
+
+	public static readonly viewType = 'calicoColors.colorsView';
+
+	private _view?: vscode.WebviewView;
+
+	constructor(
+		private readonly _extensionUri: vscode.Uri,
+	) { }
+
+	public resolveWebviewView(
+		webviewView: vscode.WebviewView,
+		context: vscode.WebviewViewResolveContext,
+		_token: vscode.CancellationToken,
+	) {
+		this._view = webviewView;
+
+		webviewView.webview.options = {
+			// Allow scripts in the webview
+			enableScripts: true,
+
+			localResourceRoots: [
+				this._extensionUri
+			]
+		};
+
+		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+
+		webviewView.webview.onDidReceiveMessage(data => {
+			switch (data.type) {
+				case 'colorSelected':
+					{
+						vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
+						break;
+					}
+			}
+		});
+	}
+	private _getHtmlForWebview(webview: vscode.Webview) {
+		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.
+	//	const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+	const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+	const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
+
+		// Do the same for the stylesheet.
+		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
+		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
+		
+		return `<!DOCTYPE html>
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+				<link href="${styleMainUri}" rel="stylesheet">
+
+				<title>Cat Colors</title>
+			</head>
+			<body>
+				<h1> Ably: Accessibility Helper </h1>
+				<p> Try </p>
+			</body>
+			</html>`;
+	}
+}
 
   
 

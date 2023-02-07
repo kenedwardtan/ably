@@ -19,12 +19,29 @@
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
+	
 	"main": "./client/out/extension",
 	"contributes": {
+		"views": {
+			"explorer": [
+				{
+					"type": "webview",
+					"id": "calicoColors.colorsView",
+					"name": "Ably"
+				}
+			]
+		},
 		"commands": [
 			{
-				"command": "exampleApp.openWebview",
-				"title": "Open webview"
+				"command": "calicoColors.addColor",
+				"category": "Calico Colors",
+				"title": "Add Color"
+			},
+			{
+				"command": "calicoColors.clearColors",
+				"category": "Calico Colors",
+				"title": "Clear Colors",
+				"icon": "$(clear-all)"
 			}
 		],
 		"configuration": {
