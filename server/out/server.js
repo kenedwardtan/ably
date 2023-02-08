@@ -501,6 +501,7 @@ async function validateTextDocument(textDocument) {
     format: "text",
   };
   const result = await validator(options);
+  console.log(result); // for debugging
 
   // Split result into array of strings for easier checking
   const errors = result.split("\n");
