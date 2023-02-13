@@ -536,7 +536,7 @@ async function validateTextDocument(textDocument) {
       }
       diagnostics.push(diagnostic);
     }
-    // 4.1.1.1 Duplicate ID
+    // 4.1.1 Duplicate ID
     else if (error.includes("Duplicate ID")) {
       // String error check based on HTML-Validator
       const input = errors[i + 1]; // get the error string containing numbers
@@ -551,7 +551,7 @@ async function validateTextDocument(textDocument) {
           end: { line: endLine - 1, character: endCol },
         },
         message: "Element must have unique IDs.",
-        source: "WCAG 2.1",
+        source: "WCAG 2.1 | 4.1.1",
       };
       if (hasDiagnosticRelatedInformationCapability) {
         diagnostic.relatedInformation = [
@@ -560,7 +560,7 @@ async function validateTextDocument(textDocument) {
               uri: textDocument.uri,
               range: Object.assign({}, diagnostic.range),
             },
-            message: "Please change your code so that all elements have a unique ID.",
+            message: "Please make sure all your attributes have different and unique IDs.",
           },
         ];
       }
@@ -612,7 +612,7 @@ async function validateTextDocument(textDocument) {
           end: { line: endLine - 1, character: endCol },
         },
         message: "Web pages must have a descriptive and concise title that accurately reflects the topic or purpose of the page.",
-        source: "WCAG 2.1",
+        source: "WCAG 2.1 | 2.4.2",
       };
       if (hasDiagnosticRelatedInformationCapability) {
         diagnostic.relatedInformation = [
@@ -645,7 +645,7 @@ async function validateTextDocument(textDocument) {
           end: { line: endLine - 1, character: endCol },
         },
         message: "Headings cannot be empty.",
-        source: "WCAG 2.1",
+        source: "WCAG 2.1 | 2.4.6",
       };
       if (hasDiagnosticRelatedInformationCapability) {
         diagnostic.relatedInformation = [
