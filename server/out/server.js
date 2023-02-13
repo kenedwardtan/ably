@@ -121,7 +121,7 @@ async function validateTextDocument(textDocument) {
 				end: textDocument.positionAt(m.index + m[0].length),
 			},
 			message: `Button lacks a label.`,
-			source: 'WCAG 2.1',
+			source: 'WCAG 2.1 | 4.1.2',
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
 			diagnostic.relatedInformation = [
@@ -131,7 +131,7 @@ async function validateTextDocument(textDocument) {
 						range: Object.assign({}, diagnostic.range),
 					},
 					message:
-						'Kindly add a label to your button. Adding `aria-label=""` within the button as an attribute will suffice (ex: <button aria-label=""></button>)',
+						'Kindly add a label to your button. Adding `aria-label=""` within the button as an attribute will suffice.',
 				},
 			];
 		}
@@ -166,7 +166,7 @@ async function validateTextDocument(textDocument) {
 						range: Object.assign({}, diagnostic.range),
 					},
 					message:
-						'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: <div role="button" tabindex="0"></div>)',
+						'Please change the `class` attribute to `role` and add `tabindex="0"`.',
 				},
 			];
 		}
@@ -193,7 +193,7 @@ async function validateTextDocument(textDocument) {
 						uri: textDocument.uri,
 						range: Object.assign({}, diagnostic.range),
 					},
-					message: 'Please add an `alt` attribute (ex: <img alt=""/>)',
+					message: 'Please add an `alt` attribute.',
 				},
 			];
 		}
@@ -220,7 +220,7 @@ async function validateTextDocument(textDocument) {
 						uri: textDocument.uri,
 						range: Object.assign({}, diagnostic.range),
 					},
-					message: 'Please add a `name` attribute (ex: <input name=""/>)',
+					message: 'Please add a `name` attribute.',
 				},
 			];
 		}
@@ -238,7 +238,7 @@ async function validateTextDocument(textDocument) {
 				end: textDocument.positionAt(m.index + m[0].length),
 			},
 			message: `You must programatically define the primary language of each page.`,
-			source: 'WCAG 2.1',
+			source: 'WCAG 2.1 | 3.1.1',
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
 			diagnostic.relatedInformation = [
@@ -247,7 +247,7 @@ async function validateTextDocument(textDocument) {
 						uri: textDocument.uri,
 						range: Object.assign({}, diagnostic.range),
 					},
-					message: 'Add a `lang` attribute to the HTML tag. (ex: <html lang="en"></html>)',
+					message: 'Add a `lang` attribute to the HTML tag. ',
 				},
 			];
 		}
@@ -441,7 +441,7 @@ async function validateTextDocument(textDocument) {
 						uri: textDocument.uri,
 						range: Object.assign({}, diagnostic.range),
 					},
-					message: 'Please change this to <form>.',
+					message: 'Please change this to <form>',
 				},
 			];
 		}
@@ -478,6 +478,11 @@ async function validateTextDocument(textDocument) {
 
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+
+
+	var files = diagnostics;
+
+   connection.sendNotification("custom/loadFiles", [files]); 
 }
 connection.onDidChangeWatchedFiles((_change) => {
 	// Monitored files have change in VSCode
