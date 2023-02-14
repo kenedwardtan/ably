@@ -177,33 +177,6 @@ async function validateTextDocument(textDocument) {
     diagnostics.push(diagnostic);
   }
 
-  // <img> must have `alt` attribute
-  const pattern3 = /(<img(?!.*?alt=(['"]).*?\2)[^>]*)(>)/g;
-  while ((m = pattern3.exec(text)) && problems < settings.maxNumberOfProblems) {
-    problems++;
-    const diagnostic = {
-      severity: node_1.DiagnosticSeverity.Warning,
-      range: {
-        start: textDocument.positionAt(m.index),
-        end: textDocument.positionAt(m.index + m[0].length),
-      },
-      message: `All non-text content such as images, icons, charts, etc must have alternate text that describes the content.`,
-      source: "WCAG 2.1",
-    };
-    if (hasDiagnosticRelatedInformationCapability) {
-      diagnostic.relatedInformation = [
-        {
-          location: {
-            uri: textDocument.uri,
-            range: Object.assign({}, diagnostic.range),
-          },
-          message: 'Please add an `alt` attribute (ex: <img alt=""/>)',
-        },
-      ];
-    }
-    diagnostics.push(diagnostic);
-  }
-
   // Input must have `name` attribute
   const pattern4 = /(<input(?!.*?name=(['"]).*?\2)[^>]*)(>)/g;
   while ((m = pattern4.exec(text)) && problems < settings.maxNumberOfProblems) {
@@ -462,7 +435,6 @@ async function validateTextDocument(textDocument) {
     diagnostics.push(diagnostic);
   }
 
-  // Parsing - 4.1.1.2
   // Initializations for validator (result is a string containing errors in HTML-Validator)
   const options = {
     data: text,
@@ -474,36 +446,68 @@ async function validateTextDocument(textDocument) {
   // Split result into array of strings for easier checking
   const errors = result.split("\n");
 
-  errors.forEach((error, i) => {
-    if (error.includes("Unclosed element") || error.includes("Stray end tag")) {
-      // String error check based on HTML-Validator
-      const input = errors[i + 1]; // get the error string containing numbers
-      const pattern = /(\d+)/g;
-      const nums = input.match(pattern).map(Number); // get start and end line and column
-      const [startLine, startCol, endLine, endCol] = nums;
+  // Function for finding the line and column (parameter: error)
+  const findLineAndColumn = (error) => {
+    const pattern =
+      /From line (\d+), column (\d+); to line (\d+), column (\d+)/;
+    const match = error.match(pattern);
+    if (!match) return null;
+    const [, startLine, startCol, endLine, endCol] = match;
+    return {
+      start: { line: Number(startLine) - 1, character: Number(startCol) - 1 },
+      end: { line: Number(endLine) - 1, character: Number(endCol) },
+    };
+  };
 
-      const diagnostic = {
-        severity: node_1.DiagnosticSeverity.Warning,
-        range: {
-          start: { line: startLine - 1, character: startCol - 1 },
-          end: { line: endLine - 1, character: endCol },
-        },
-        message: "Element must have a proper opening/closing tag.",
-        source: "WCAG 2.1 | 4.1.1",
-      };
-      if (hasDiagnosticRelatedInformationCapability) {
-        diagnostic.relatedInformation = [
-          {
-            location: {
-              uri: textDocument.uri,
-              range: Object.assign({}, diagnostic.range),
-            },
-            message: "Please add the proper tag.",
-          },
-        ];
-      }
-      diagnostics.push(diagnostic);
+  errors.forEach((error, i) => {
+    let diagnostic;
+    let errorMsg;
+    let suggestMsg;
+    let source;
+
+    if (error.includes("An “img” element must have an “alt” attribute")) {
+      // 1.1.1
+      errorMsg = "Images must have an alt attribute.";
+      suggestMsg = "Please add an appropriate alt attribute.";
+      source = "WCAG 2.1 | 1.1.1";
+    } else if (
+      // 4.1.1.2
+      error.includes("Unclosed element") ||
+      error.includes("Stray end tag")
+    ) {
+      errorMsg = "Element must have a proper opening/closing tag.";
+      suggestMsg = "Please add the appropriate HTML tag to complete.";
+      source = "WCAG 2.1 | 4.1.1";
+    } else {
+      return;
     }
+
+    // call function for range
+    const location = findLineAndColumn(errors[i + 1]);
+    if (!location) return;
+
+    // diagnostic object for error message
+    diagnostic = {
+      severity: node_1.DiagnosticSeverity.Warning,
+      range: location,
+      message: errorMsg,
+      source: source,
+    };
+
+    // related diagnostic info object for suggestion message
+    if (hasDiagnosticRelatedInformationCapability) {
+      diagnostic.relatedInformation = [
+        {
+          location: {
+            uri: textDocument.uri,
+            range: location,
+          },
+          message: suggestMsg,
+        },
+      ];
+    }
+
+    diagnostics.push(diagnostic);
   });
 
   // Send the computed diagnostics to VSCode.
