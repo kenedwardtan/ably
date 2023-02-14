@@ -370,38 +370,6 @@ async function validateTextDocument(textDocument) {
     diagnostics.push(diagnostic);
   }
 
-  // Proper opening/closing tag nesting (button, h1-6, p, b, i, u)
-  const pattern10 =
-    /<button>.*?[\s\n]+?<\/button>|<h1>.*?[\s\n]+?<\/h1>|<h2>.*?[\s\n]+?<\/h2>|<h3>.*?[\s\n]+?<\/h3>|<h4>.*?[\s\n]+?<\/h4>|<h5>.*?[\s\n]+?<\/h5>|<h6>.*?[\s\n]+?<\/h6>|<p>.*?[\s\n]+?<\/p>|<b>.*?[\s\n]+?<\/b>|<u>.*?[\s\n]+?<\/u>|<i>.*?[\s\n]+?<\/i>/g;
-  while (
-    (m = pattern10.exec(text)) &&
-    problems < settings.maxNumberOfProblems
-  ) {
-    problems++;
-    const diagnostic = {
-      severity: node_1.DiagnosticSeverity.Warning,
-      range: {
-        start: textDocument.positionAt(m.index),
-        end: textDocument.positionAt(m.index + m[0].length),
-      },
-      message: `Attribute closing tag nesting is incorrect.`,
-      source: "WCAG 2.1",
-    };
-    if (hasDiagnosticRelatedInformationCapability) {
-      diagnostic.relatedInformation = [
-        {
-          location: {
-            uri: textDocument.uri,
-            range: Object.assign({}, diagnostic.range),
-          },
-          message:
-            "Have your attributes at the same line rather than putting the closing attribute at the next line.",
-        },
-      ];
-    }
-    diagnostics.push(diagnostic);
-  }
-
   // 1.3.5.1 Identify Input Purpose
   const pattern11 = /(<input(?=.*?type=(['"]).*?\2)[^>]*)(>)/g;
   while (
@@ -521,7 +489,7 @@ async function validateTextDocument(textDocument) {
           end: { line: endLine - 1, character: endCol },
         },
         message: "Element must have a proper opening/closing tag.",
-        source: "WCAG 2.1",
+        source: "WCAG 2.1 | 4.1.1",
       };
       if (hasDiagnosticRelatedInformationCapability) {
         diagnostic.relatedInformation = [
