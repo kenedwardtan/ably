@@ -477,12 +477,12 @@ async function validateTextDocument(textDocument) {
         "Consider adding a “lang” attribute to the “html” start tag to declare the language of this document."
       )
     ) {
-      // 3.1.1/3.1.2
+      // 3.1.1
       errorMsg =
         "You must programatically define the primary language of each page.";
       suggestMsg =
         "Please add a lang attribute to the HTML tag and state the primary language.";
-      source = "WCAG 2.1 | 3.1.1 & 3.1.2";
+      source = "WCAG 2.1 | 3.1.1";
     } else {
       return;
     }
