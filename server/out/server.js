@@ -465,6 +465,7 @@ async function validateTextDocument(textDocument) {
     let suggestMsg;
     let source;
 
+    // keil
     if (error.includes("An “img” element must have an “alt” attribute")) {
       // 1.1.1
       errorMsg = "Images must have an alt attribute.";
@@ -480,6 +481,28 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 4.1.1";
     } else {
       return;
+      // IMPORTANT ! REMOVE RETURN ABOVE IF YOU'RE ADDING YOUR IF
+      /* PAM AND KENNETH CODE HERE
+
+      // pam
+      if (condition) { 
+        ...
+      } else if (condition) { 
+        ...
+        else {
+
+          // kenneth
+          if (condition) { 
+            ...
+          } else if (condition) {
+            ...
+          } else {
+            return
+          }
+          
+        }
+      }
+      */
     }
 
     // call function for range
