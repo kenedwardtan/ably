@@ -128,7 +128,7 @@ async function validateTextDocument(textDocument) {
         end: textDocument.positionAt(m.index + m[0].length),
       },
       message: `Button lacks a label.`,
-      source: "WCAG 2.1 | 2.5.3" ,
+      source: "WCAG 2.1 | 2.5.3",
     };
     if (hasDiagnosticRelatedInformationCapability) {
       diagnostic.relatedInformation = [
@@ -435,44 +435,38 @@ async function validateTextDocument(textDocument) {
       suggestMsg = "Please add the appropriate HTML tag to complete.";
       source = "WCAG 2.1 | 4.1.1";
     }
-    
-     // 4.1.1 - Duplicate ID
 
-    else if (
-     
-      error.includes("Duplicate ID") 
-    ) {
+    // 4.1.1 - Duplicate ID
+
+    else if (error.includes("Duplicate ID")) {
       errorMsg = "Element must have unique IDs.";
       suggestMsg = "Please make sure all your attributes have different and unique IDs.";
       source = "WCAG 2.1 | 4.1.1";
     }
 
-     // 2.4.2 - Page Title
-
-     else if (
-     
-      error.includes("Element “title” must not be empty.") 
-    ) {
+    // 2.4.2 - Page Title
+    else if (error.includes("Element “title” must not be empty.")) {
       errorMsg = "Element title cannot be empty, must have text content";
       suggestMsg = "Please add a descriptive title to your content.";
       source = "WCAG 2.1 | 2.4.2";
     }
 
-    // 2.4.2 - Page Title
+    else if (error.includes("missing a required instance of child element")) {
+      errorMsg = "Element title cannot be empty, must have text content";
+      suggestMsg = "Please add a descriptive title to your content.";
+      source = "WCAG 2.1 | 2.4.2";
+    }
 
-    else if (
-     
-      error.includes("is missing a required instance of child element") 
-    ) {
+    else if (error.includes("is missing a required instance of child element")) {
       errorMsg = "Web pages must have a descriptive and concise title that accurately reflects the topic or purpose of the page.";
       suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
       source = "WCAG 2.1 | 2.4.2";
-    }
-      
-    else{
+    } 
+
+    else {
       return;
     }
-    
+
 
     // call function for range
     const location = findLineAndColumn(errors[i + 1]);
@@ -507,9 +501,9 @@ async function validateTextDocument(textDocument) {
 
 
 
-	var files = diagnostics;
-	
-   connection.sendNotification("custom/loadFiles", [files]); 
+  var files = diagnostics;
+
+  connection.sendNotification("custom/loadFiles", [files]);
 
 
 
