@@ -561,6 +561,7 @@ class ColorsViewProvider {
         function addError(item, index) {
 			//console.log("guide array = " + guideArray[index] + " item = " + item);
             if (guideArray[index].startsWith('1')){
+                // guideArray[index] = Guideline Number
                 onetext += "<span class="+ "list" +">"+ item + " <a href='https://www.boia.org/wcag2/cp/" + guideArray[index] + "'>Learn More</a> </span>";
                 x++
 				console.log("item in 1 = " + item);

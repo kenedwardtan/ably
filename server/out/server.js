@@ -390,16 +390,55 @@ async function validateTextDocument(textDocument) {
     diagnostics.push(diagnostic);
   }
 
+
+   // Initializations for validator (result is a string containing errors in HTML-Validator)
+   const Hoptions = {
+    data: text,
+    validator: 'http://html5.validator.nu',
+    format: "text",
+  };
+  const Hresult = await validator(Hoptions);
+  //console.log(Hresult); // for debugging
+
+   // Initializations for validator (result is a string containing errors in HTML-Validator)
+   const Woptions = {
+    data: text,
+    validator: 'WHATWG',
+    format: "text",
+  };
+  const Wresult = await validator(Woptions);
+  //console.log(Wresult.errors); // for debugging
+
+let WerrorMessages = '';
+
+Wresult.errors.forEach((error) => {
+  const errorMessage = `Error: ${error.message}\nFrom line ${error.line}, column ${error.column}; to line ${error.line}, column ${error.offset + 1}\n`;
+  WerrorMessages += errorMessage;
+});
+//console.log("----------- WHATWG START ------- ")
+//console.log(WerrorMessages);
+//console.log("----------- WHATWG END ------- ")
+
+
   // Initializations for validator (result is a string containing errors in HTML-Validator)
   const options = {
     data: text,
     format: "text",
   };
   const result = await validator(options);
-  console.log(result); // for debugging
+  //console.log(result); // for debugging
 
   // Split result into array of strings for easier checking
-  const errors = result.split("\n");
+  //const Lerrors = result.split("\n");
+
+  const resultsCombined = WerrorMessages + result;
+  const errors = resultsCombined.split("\n");
+
+  console.log(errors);
+
+  //console.log("~~~~ COMBINED ~~~~")
+  //console.log(combinedErrors);
+  //console.log("~~~~ COMBINED END ~~~~")
 
   // Function for finding the line and column (parameter: error)
   const findLineAndColumn = (error) => {
@@ -462,6 +501,7 @@ async function validateTextDocument(textDocument) {
       suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
       source = "WCAG 2.1 | 2.4.2";
     } 
+    
 
     else {
       return;
