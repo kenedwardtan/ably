@@ -184,7 +184,7 @@ async function validateTextDocument(textDocument) {
 				end: textDocument.positionAt(m.index + m[0].length),
 			},
 			message: `All non-text content such as images, icons, charts, etc must have alternate text that describes the content.`,
-			source: 'WCAG 2.1',
+			source: 'WCAG 2.1 | 1.1.1',
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
 			diagnostic.relatedInformation = [
@@ -211,7 +211,7 @@ async function validateTextDocument(textDocument) {
 				end: textDocument.positionAt(m.index + m[0].length),
 			},
 			message: `Headings and labels should be descriptive.`,
-			source: 'WCAG 2.1',
+			source: 'WCAG 2.1 | 1.3.5',
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
 			diagnostic.relatedInformation = [
@@ -220,7 +220,7 @@ async function validateTextDocument(textDocument) {
 						uri: textDocument.uri,
 						range: Object.assign({}, diagnostic.range),
 					},
-					message: 'Please add a `name` attribute (ex: <input name=""/>)',
+					message: 'Please add a `name` attribute to your input element.',
 				},
 			];
 		}
@@ -265,7 +265,7 @@ async function validateTextDocument(textDocument) {
 				end: textDocument.positionAt(m.index + m[0].length),
 			},
 			message: `Span has a 'font' style. Try making it simpler and more intuitive.`,
-			source: 'WCAG 2.1',
+			source: 'WCAG 2.1 | 1.3.2',
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
 			diagnostic.relatedInformation = [
@@ -478,6 +478,12 @@ async function validateTextDocument(textDocument) {
 
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+
+
+	var files = diagnostics;
+	
+   connection.sendNotification("custom/loadFiles", [files]); 
+
 }
 connection.onDidChangeWatchedFiles((_change) => {
 	// Monitored files have change in VSCode
