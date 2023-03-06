@@ -535,6 +535,15 @@ async function validateTextDocument(textDocument) {
 
   // Send the computed diagnostics to VSCode.
   connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
+
+
+
+	var files = diagnostics;
+	
+   connection.sendNotification("custom/loadFiles", [files]); 
+
+
+
 }
 connection.onDidChangeWatchedFiles((_change) => {
   // Monitored files have change in VSCode
