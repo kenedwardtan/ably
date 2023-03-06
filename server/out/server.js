@@ -434,136 +434,45 @@ async function validateTextDocument(textDocument) {
       errorMsg = "Element must have a proper opening/closing tag.";
       suggestMsg = "Please add the appropriate HTML tag to complete.";
       source = "WCAG 2.1 | 4.1.1";
-    } else {
-           // IMPORTANT ! REMOVE RETURN ABOVE IF YOU'RE ADDING YOUR IF
-      // pam
-    
-       // 4.1.1 Duplicate ID
-       if (error.includes("Duplicate ID")) {
-        // String error check based on HTML-Validator
-        const input = errors[i + 1]; // get the error string containing numbers
-        const pattern = /(\d+)/g;
-        const nums = input.match(pattern).map(Number); // get start and end line and column
-        const [startLine, startCol, endLine, endCol] = nums;
-
-        const diagnostic = {
-          severity: node_1.DiagnosticSeverity.Warning,
-          range: {
-            start: { line: startLine - 1, character: startCol - 1 },
-            end: { line: endLine - 1, character: endCol },
-          },
-          message: "Element must have unique IDs.",
-          source: "WCAG 2.1 | 4.1.1",
-        };
-        if (hasDiagnosticRelatedInformationCapability) {
-          diagnostic.relatedInformation = [
-            {
-              location: {
-                uri: textDocument.uri,
-                range: Object.assign({}, diagnostic.range),
-              },
-              message: "Please make sure all your attributes have different and unique IDs.",
-            },
-          ];
-        }
-        diagnostics.push(diagnostic);
-      }
-      
-      // 2.4.2 Page Titled  -- Empty Title
-      else if (error.includes("Element “title” must not be empty.")) {
-        // String error check based on HTML-Validator
-        const input = errors[i + 1]; // get the error string containing numbers
-        const pattern = /(\d+)/g;
-        const nums = input.match(pattern).map(Number); // get start and end line and column
-        const [startLine, startCol, endLine, endCol] = nums;
-
-        const diagnostic = {
-          severity: node_1.DiagnosticSeverity.Warning,
-          range: {
-            start: { line: startLine - 1, character: startCol - 1 },
-            end: { line: endLine - 1, character: endCol },
-          },
-          message: "Element title cannot be empty, must have text content",
-          source: "WCAG 2.1",
-        };
-        if (hasDiagnosticRelatedInformationCapability) {
-          diagnostic.relatedInformation = [
-            {
-              location: {
-                uri: textDocument.uri,
-                range: Object.assign({}, diagnostic.range),
-              },
-              message: "Please add a descriptive title to your content.",
-            },
-          ];
-        }
-        diagnostics.push(diagnostic);
-      }
-
-      // 2.4.2 Page Titled 
-      else if (error.includes("is missing a required instance of child element")) {
-        // String error check based on HTML-Validator
-        const input = errors[i + 1]; // get the error string containing numbers
-        const pattern = /(\d+)/g;
-        const nums = input.match(pattern).map(Number); // get start and end line and column
-        const [startLine, startCol, endLine, endCol] = nums;
-
-        const diagnostic = {
-          severity: node_1.DiagnosticSeverity.Warning,
-          range: {
-            start: { line: startLine - 1, character: startCol - 1 },
-            end: { line: endLine - 1, character: endCol },
-          },
-          message: "Web pages must have a descriptive and concise title that accurately reflects the topic or purpose of the page.",
-          source: "WCAG 2.1 | 2.4.2",
-        };
-        if (hasDiagnosticRelatedInformationCapability) {
-          diagnostic.relatedInformation = [
-            {
-              location: {
-                uri: textDocument.uri,
-                range: Object.assign({}, diagnostic.range),
-              },
-              message: "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.",
-            },
-          ];
-        }
-        diagnostics.push(diagnostic);
-      }
-
-/*
-      // 2.4.6: Headings and Labels - Empty Heading
-
-      else if (error.includes("Empty heading")) {
-        // String error check based on HTML-Validator
-        const input = errors[i + 1]; // get the error string containing numbers
-        const pattern = /(\d+)/g;
-        const nums = input.match(pattern).map(Number); // get start and end line and column
-        const [startLine, startCol, endLine, endCol] = nums;
-
-        const diagnostic = {
-          severity: node_1.DiagnosticSeverity.Warning,
-          range: {
-            start: { line: startLine - 1, character: startCol - 1 },
-            end: { line: endLine - 1, character: endCol },
-          },
-          message: "Headings cannot be empty.",
-          source: "WCAG 2.1 | 2.4.6",
-        };
-        if (hasDiagnosticRelatedInformationCapability) {
-          diagnostic.relatedInformation = [
-            {
-              location: {
-                uri: textDocument.uri,
-                range: Object.assign({}, diagnostic.range),
-              },
-              message: "Please make sure to provide descriptive headings for your content.",
-            },
-          ];
-        }
-        diagnostics.push(diagnostic);
-      }*/
     }
+    
+     // 4.1.1 - Duplicate ID
+
+    else if (
+     
+      error.includes("Duplicate ID") 
+    ) {
+      errorMsg = "Element must have unique IDs.";
+      suggestMsg = "Please make sure all your attributes have different and unique IDs.";
+      source = "WCAG 2.1 | 4.1.1";
+    }
+
+     // 2.4.2 - Page Title
+
+     else if (
+     
+      error.includes("Element “title” must not be empty.") 
+    ) {
+      errorMsg = "Element title cannot be empty, must have text content";
+      suggestMsg = "Please add a descriptive title to your content.";
+      source = "WCAG 2.1 | 2.4.2";
+    }
+
+    // 2.4.2 - Page Title
+
+    else if (
+     
+      error.includes("is missing a required instance of child element") 
+    ) {
+      errorMsg = "Web pages must have a descriptive and concise title that accurately reflects the topic or purpose of the page.";
+      suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
+      source = "WCAG 2.1 | 2.4.2";
+    }
+      
+    else{
+      return;
+    }
+    
 
     // call function for range
     const location = findLineAndColumn(errors[i + 1]);
