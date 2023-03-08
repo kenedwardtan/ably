@@ -239,8 +239,11 @@ async function validateTextDocument(textDocument) {
   }
 
   // 1.3.4
-  // if width uses px
-  const pattern7 = /(width:.*?px.*?)/g;
+  // Checks if background-position-x, background-position-y, background-size, 
+  // border-radius, font-size, height, left, letter-spacing, line-height, margin, 
+  // max-height, max-width, min-height, min-width, opacity, outline-offset, padding, right, 
+  // text-indent, top, transform-origin, width, and z-index uses px
+  const pattern7 = /(background-position-x|background-position-y|background-size|border-radius|font-size|height|left|letter-spacing|line-height|margin|max-height|max-width|min-height|min-width|opacity|outline-offset|padding|right|text-indent|top|transform-origin|width|z-index):.*?\d+px.*?/g;
   while ((m = pattern7.exec(text)) && problems < settings.maxNumberOfProblems) {
     problems++;
     const diagnostic = {
@@ -260,7 +263,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            "If this is your main width, opt to change it into a percentage. Add a media query to cater to other screen sizes.",
+            "Avoid using sizes that can only be viewed in a specific orientation, try using % for your sizes. Add a media query to cater to other screen sizes.",
         },
       ];
     }
