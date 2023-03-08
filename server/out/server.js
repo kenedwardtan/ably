@@ -114,7 +114,8 @@ async function validateTextDocument(textDocument) {
   // 2.5.3
 
   // <button> must have `aria-label` attribute
-  const pattern1 = /(<button(?!.*?aria-label=(['"]).*?\2)[^>]*)(>)/g;
+  const pattern1 = /(<(a|audio|button|details|embed|input|textarea|keygen|label|select|object|video|menuitem|meter|output|progress|datalist|fieldset|legend|article|aside|footer|header|main|nav|section|area|form|iframe|img|figure|summary|table|td|th))(?![^>]*\saria-label=["'][^"']*["']|[^>]*\saria-label=[^"'])/gi
+
   let m;
 
   let problems = 0;
@@ -127,7 +128,7 @@ async function validateTextDocument(textDocument) {
         start: textDocument.positionAt(m.index),
         end: textDocument.positionAt(m.index + m[0].length),
       },
-      message: `Button lacks a label.`,
+      message: `Element lacks a label.`,
       source: "WCAG 2.1 | 2.5.3",
     };
     if (hasDiagnosticRelatedInformationCapability) {
@@ -138,7 +139,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            'Kindly add a label to your button. Adding `aria-label=""` within the button as an attribute will suffice (ex: <button aria-label=""></button>)',
+            'Kindly add an `aria-label=""` to your element. (ex: &lt;button aria-label=""&gt&lt;/button&gt)',
         },
       ];
     }
@@ -166,7 +167,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: "Please change this to <button></button>",
+          message: "Please change this to &lt;button&gt&lt;/button&gt",
         },
         {
           location: {
@@ -174,7 +175,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: <div role="button" tabindex="0"></div>)',
+            'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: &lt;div role="button" tabindex="0"&gt&lt;/div&gt)',
         },
       ];
     }
@@ -202,7 +203,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: 'Please add a `name` attribute (ex: <input name=""/>)',
+          message: 'Please add a `name` attribute (ex: &lt;input name=""/&gt)',
         },
       ];
     }
@@ -231,7 +232,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            "Remove this from the css. Use the appropriate HTML tag instead of <span></span>.",
+            "Remove this from the css. Use the appropriate HTML tag instead of &lt;span&gt&lt;/span>.",
         },
       ];
     }
@@ -350,7 +351,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: "Please change this to <form>",
+          message: "Please change this to &lt;form&gt",
         },
       ];
     }
