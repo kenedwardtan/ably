@@ -508,6 +508,15 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 1.1.1";
     }
 
+    // 1.1.1 - Input Missing Label
+
+    else if (error.includes("<input> element does not have a <label>")) {
+      errorMsg = "Input is missing a label";
+      suggestMsg = "Please add a label attribute to your input.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+
 
     else {
       return;
