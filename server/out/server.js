@@ -495,6 +495,17 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 2.4.2";
     }
 
+    //2.4.10
+
+    else if (error.includes("Heading level can only increase by one, expected <h2> but got <h3>")) {
+      errorMsg = "Heading level can only increase by one.";
+      suggestMsg = "Please check if your headings start at h1 and if it only increases one level at a time. (h1>h6)";
+      source = "WCAG 2.1 | 2.4.10";
+    }
+
+
+
+
 
     else {
       return;
