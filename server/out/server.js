@@ -437,8 +437,6 @@ async function validateTextDocument(textDocument) {
 
   //const errors = result.split("\n");
   const errors = tryerrors;
-
-
   console.log(errors);
 
   //console.log("~~~~ COMBINED ~~~~")
