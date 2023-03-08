@@ -138,7 +138,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            'Kindly add a label to your button. Adding `aria-label=""` within the button as an attribute will suffice (ex: <button aria-label=""></button>)',
+            'Kindly add a label to your button. Adding `aria-label=""` within the button as an attribute will suffice (ex: &lt;button aria-label=""&gt;&lt;/button&gt;)',
         },
       ];
     }
@@ -166,7 +166,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: "Please change this to <button></button>",
+          message: "Please change this to &lt;button&gt;&lt;/button&gt;",
         },
         {
           location: {
@@ -174,7 +174,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: <div role="button" tabindex="0"></div>)',
+            'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: &lt;div role="button" tabindex="0"&gt;&lt;/div&gt;)',
         },
       ];
     }
@@ -202,7 +202,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: 'Please add a `name` attribute (ex: <input name=""/>)',
+          message: 'Please add a `name` attribute (ex: &lt;input name=""/&gt;)',
         },
       ];
     }
@@ -231,7 +231,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            "Remove this from the css. Use the appropriate HTML tag instead of <span></span>.",
+            "Remove this from the css. Use the appropriate HTML tag instead of &lt;span&gt;&lt;/span&gt;.",
         },
       ];
     }
@@ -353,7 +353,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: "Please change this to <form>",
+          message: "Please change this to &lt;form&gt;",
         },
       ];
     }
