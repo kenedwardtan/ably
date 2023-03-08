@@ -592,6 +592,15 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 1.1.1";
     }
 
+       // 3.2.2 - Input Missing Label
+
+       else if (error.includes("<form> element must have a submit button")) {
+        errorMsg = "Form elements must have a submit button";
+        suggestMsg = "Please add submit button on your form group.";
+        source = "WCAG 2.1 | 1.1.1";
+      }
+  
+
 
 
     else {
