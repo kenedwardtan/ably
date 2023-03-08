@@ -495,6 +495,17 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 2.4.2";
     }
 
+      // 2.4.6: Headings and Labels - Empty Heading
+
+      else if (
+        error.includes("Empty Heading") 
+      ) {
+        errorMsg = "Headings cannot be empty.";
+        suggestMsg = "Please make sure to provide descriptive headings for your content.";
+        source = "WCAG 2.1 | 2.4.6";
+      }
+      
+
 
     else {
       return;
