@@ -495,6 +495,13 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 2.4.2";
     }
 
+    // 2.4.2 - Page Titled Long Title
+    else if (error.includes("title text cannot be longer than 70 characters")) {
+      errorMsg = "Title text cannot be longer than 70 characters.";
+      suggestMsg = "Please limit your webpage title to below 70 characters for better SEO.";
+      source = "WCAG 2.1 | 2.4.2";
+    }
+
 
     else {
       return;
