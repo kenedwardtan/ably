@@ -114,8 +114,7 @@ async function validateTextDocument(textDocument) {
   // 2.5.3
 
   // <button> must have `aria-label` attribute
-  const pattern1 = /(<(a|audio|button|details|embed|input|textarea|keygen|label|select|object|video|menuitem|meter|output|progress|datalist|fieldset|legend|article|aside|footer|header|main|nav|section|area|form|iframe|img|figure|summary|table|td|th))(?![^>]*\saria-label=["'][^"']*["']|[^>]*\saria-label=[^"'])/gi
-
+  const pattern1 = /(<button(?!.*?aria-label=(['"]).*?\2)[^>]*)(>)/g;
   let m;
 
   let problems = 0;
@@ -128,7 +127,7 @@ async function validateTextDocument(textDocument) {
         start: textDocument.positionAt(m.index),
         end: textDocument.positionAt(m.index + m[0].length),
       },
-      message: `Element lacks a label.`,
+      message: `Button lacks a label.`,
       source: "WCAG 2.1 | 2.5.3",
     };
     if (hasDiagnosticRelatedInformationCapability) {
@@ -139,7 +138,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            'Kindly add an `aria-label=""` to your element. (ex: &lt;button aria-label=""&gt&lt;/button&gt)',
+            'Kindly add a label to your button. Adding `aria-label=""` within the button as an attribute will suffice (ex: <button aria-label=""></button>)',
         },
       ];
     }
@@ -167,7 +166,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: "Please change this to &lt;button&gt&lt;/button&gt",
+          message: "Please change this to <button></button>",
         },
         {
           location: {
@@ -175,7 +174,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: &lt;div role="button" tabindex="0"&gt&lt;/div&gt)',
+            'Please change the `class` attribute to `role` and add `tabindex="0"` (ex: <div role="button" tabindex="0"></div>)',
         },
       ];
     }
@@ -203,7 +202,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: 'Please add a `name` attribute (ex: &lt;input name=""/&gt)',
+          message: 'Please add a `name` attribute (ex: <input name=""/>)',
         },
       ];
     }
@@ -232,7 +231,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            "Remove this from the css. Use the appropriate HTML tag instead of &lt;span&gt&lt;/span>.",
+            "Remove this from the css. Use the appropriate HTML tag instead of <span></span>.",
         },
       ];
     }
@@ -351,7 +350,7 @@ async function validateTextDocument(textDocument) {
             uri: textDocument.uri,
             range: Object.assign({}, diagnostic.range),
           },
-          message: "Please change this to &lt;form&gt",
+          message: "Please change this to <form>",
         },
       ];
     }
@@ -495,6 +494,28 @@ async function validateTextDocument(textDocument) {
       suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
       source = "WCAG 2.1 | 2.4.2";
     }
+
+    // 1.1.1 - Area alt
+    else if (error.includes("Element “area” is missing required attribute “alt”")) {
+      errorMsg = "'Area' elements should have an alt attribute.";
+      suggestMsg = "Please add an `alt` attribute to your area element to ensure accessibility.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    else if (error.includes("Element “area” is missing required attribute “href”")) {
+      errorMsg = "'Area' elements should have an href attribute.";
+      suggestMsg = "Make sure there is an `href` present in your area element.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    // 1.1.1 - Input Missing Label
+
+    else if (error.includes("<input> element does not have a <label>")) {
+      errorMsg = "Input is missing a label";
+      suggestMsg = "Please add a label attribute to your input.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
 
 
     else {
