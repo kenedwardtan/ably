@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * ------------------------------------------------------------------------------------------ */
 const node_1 = require("vscode-languageserver/node");
 const vscode_languageserver_textdocument_1 = require("vscode-languageserver-textdocument");
-const validator = require("html-validator");
+const validator = require("@pamkirsten/html-validator");
 // Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 const connection = (0, node_1.createConnection)(node_1.ProposedFeatures.all);
@@ -389,16 +389,6 @@ async function validateTextDocument(textDocument) {
     }
     diagnostics.push(diagnostic);
   }
-
-
-  // Initializations for validator (result is a string containing errors in HTML-Validator)
-  const Hoptions = {
-    data: text,
-    validator: 'http://html5.validator.nu',
-    format: "text",
-  };
-  const Hresult = await validator(Hoptions);
-  //console.log(Hresult); // for debugging
 
   // Initializations for validator (result is a string containing errors in HTML-Validator)
   const Woptions = {

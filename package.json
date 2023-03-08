@@ -19,7 +19,6 @@
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
-	
 	"main": "./client/out/extension",
 	"contributes": {
 		"views": {
@@ -86,6 +85,7 @@
 		"typescript": "^4.8.4"
 	},
 	"dependencies": {
+		"@pamkirsten/html-validator": "^6.0.1",
 		"vscode": "^1.1.37"
 	}
 }
