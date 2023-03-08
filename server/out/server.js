@@ -494,7 +494,6 @@ async function validateTextDocument(textDocument) {
       suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
       source = "WCAG 2.1 | 2.4.2";
     }
-
     // 3.1.1 - Language of Parts
 
     else if (error.includes("Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.")) {
@@ -505,6 +504,28 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 3.1.1";
     }
 
+
+
+    // 1.1.1 - Area alt
+    else if (error.includes("Element “area” is missing required attribute “alt”")) {
+      errorMsg = "'Area' elements should have an alt attribute.";
+      suggestMsg = "Please add an `alt` attribute to your area element to ensure accessibility.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    else if (error.includes("Element “area” is missing required attribute “href”")) {
+      errorMsg = "'Area' elements should have an href attribute.";
+      suggestMsg = "Make sure there is an `href` present in your area element.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    // 1.1.1 - Input Missing Label
+
+    else if (error.includes("<input> element does not have a <label>")) {
+      errorMsg = "Input is missing a label";
+      suggestMsg = "Please add a label attribute to your input.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
 
 
 
