@@ -571,6 +571,28 @@ async function validateTextDocument(textDocument) {
 
 
 
+    // 1.1.1 - Area alt
+    else if (error.includes("Element “area” is missing required attribute “alt”")) {
+      errorMsg = "'Area' elements should have an alt attribute.";
+      suggestMsg = "Please add an `alt` attribute to your area element to ensure accessibility.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    else if (error.includes("Element “area” is missing required attribute “href”")) {
+      errorMsg = "'Area' elements should have an href attribute.";
+      suggestMsg = "Make sure there is an `href` present in your area element.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    // 1.1.1 - Input Missing Label
+
+    else if (error.includes("<input> element does not have a <label>")) {
+      errorMsg = "Input is missing a label";
+      suggestMsg = "Please add a label attribute to your input.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+
 
     else {
       return;
