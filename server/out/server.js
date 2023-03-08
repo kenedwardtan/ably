@@ -391,8 +391,8 @@ async function validateTextDocument(textDocument) {
   }
 
 
-   // Initializations for validator (result is a string containing errors in HTML-Validator)
-   const Hoptions = {
+  // Initializations for validator (result is a string containing errors in HTML-Validator)
+  const Hoptions = {
     data: text,
     validator: 'http://html5.validator.nu',
     format: "text",
@@ -400,8 +400,8 @@ async function validateTextDocument(textDocument) {
   const Hresult = await validator(Hoptions);
   //console.log(Hresult); // for debugging
 
-   // Initializations for validator (result is a string containing errors in HTML-Validator)
-   const Woptions = {
+  // Initializations for validator (result is a string containing errors in HTML-Validator)
+  const Woptions = {
     data: text,
     validator: 'WHATWG',
     format: "text",
@@ -409,15 +409,15 @@ async function validateTextDocument(textDocument) {
   const Wresult = await validator(Woptions);
   //console.log(Wresult.errors); // for debugging
 
-let WerrorMessages = '';
+  let WerrorMessages = '';
 
-Wresult.errors.forEach((error) => {
-  const errorMessage = `Error: ${error.message}\nFrom line ${error.line}, column ${error.column}; to line ${error.line}, column ${error.offset + 1}\n`;
-  WerrorMessages += errorMessage;
-});
-//console.log("----------- WHATWG START ------- ")
-//console.log(WerrorMessages);
-//console.log("----------- WHATWG END ------- ")
+  Wresult.errors.forEach((error) => {
+    const errorMessage = `Error: ${error.message}\nFrom line ${error.line}, column ${error.column}; to line ${error.line}, column ${error.offset + 1}\n`;
+    WerrorMessages += errorMessage;
+  });
+  //console.log("----------- WHATWG START ------- ")
+  //console.log(WerrorMessages);
+  //console.log("----------- WHATWG END ------- ")
 
 
   // Initializations for validator (result is a string containing errors in HTML-Validator)
@@ -432,7 +432,12 @@ Wresult.errors.forEach((error) => {
   //const Lerrors = result.split("\n");
 
   const resultsCombined = WerrorMessages + result;
-  const errors = resultsCombined.split("\n");
+  const tryerrors = resultsCombined.split("\n");
+  //console.log(tryerrors);
+
+  //const errors = result.split("\n");
+  const errors = tryerrors;
+
 
   console.log(errors);
 
@@ -500,8 +505,8 @@ Wresult.errors.forEach((error) => {
       errorMsg = "Web pages must have a descriptive and concise title that accurately reflects the topic or purpose of the page.";
       suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
       source = "WCAG 2.1 | 2.4.2";
-    } 
-    
+    }
+
 
     else {
       return;
