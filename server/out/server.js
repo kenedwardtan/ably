@@ -268,8 +268,8 @@ async function validateTextDocument(textDocument) {
   }
 
   // 1.4.4
-  // if font size uses px
-  const pattern8 = /((font-size:.*?px.*?))/g;
+  // if font size uses px or pt
+  const pattern8 = /(font-size:.*?\d+(px|pt).*?)/g;
   while ((m = pattern8.exec(text)) && problems < settings.maxNumberOfProblems) {
     problems++;
     const diagnostic = {
