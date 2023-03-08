@@ -495,12 +495,12 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 2.4.2";
     }
 
-    // 2.4.2 - Link Purpose
+    // 2.4.4 - Link Purpose
 
     else if (error.includes("Anchor link must have a text describing its purpose")) {
       errorMsg = "Anchor link must have a text describing its purpose.";
       suggestMsg = "Please add either an `alt` tribute inside your anchor link or a text describing it.";
-      source = "WCAG 2.1 | 2.4.2";
+      source = "WCAG 2.1 | 2.4.4";
     }
 
     
