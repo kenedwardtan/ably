@@ -621,30 +621,92 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
         document.getElementById("rAlert").innerHTML =  num2;
         document.getElementById("oAlert").innerHTML =  num3;
         document.getElementById("uAlert").innerHTML = num4;
+
+        function getLink(guidelineArray) {
+            if (guidelineArray === "1.1.1") {
+              return "https://www.notion.so/ably-extension/1-1-1-Non-text-Content-cad5db53595e4d29a25a63c98bbc55ee?pvs=4";
+            } else if (guidelineArray === "1.3.1") {
+              return "https://www.notion.so/ably-extension/1-3-1-Info-and-Relationships-e0872a3c4b4a400291bcc43cbf36c4b9?pvs=4";
+            } else if (guidelineArray === "1.3.4") {
+              return "https://www.notion.so/ably-extension/1-3-4-Orientation-1f263a2d4e4540629c5ab9b39bd8fcb8?pvs=4";
+            }
+             else if (guidelineArray === "1.3.5") {
+              return "https://www.notion.so/ably-extension/1-3-5-Identify-Input-Purpose-ae4dde5698c24a75a9be370b7ce493dd?pvs=4";
+                        }
+            else if (guidelineArray === "1.4.4") {
+                return "https://www.notion.so/ably-extension/1-4-4-Resize-Text-574323ba7a6d49e4bfb795c6e579d889?pvs=4"; 
+            }
+
+            else if (guidelineArray === "2.1.1") {
+                return "https://www.notion.so/ably-extension/2-1-1-Keyboard-cb22702c2bd14624976cc86f45dbcdbe?pvs=4"; 
+            }
+            else if (guidelineArray === "2.4.2") {
+                return "https://www.notion.so/ably-extension/2-4-2-Page-Titled-f5baad753ad94708acbdd9c71e797860?pvs=4"; 
+            }
+           
+            else if (guidelineArray === "2.4.4") {
+                return "https://www.notion.so/ably-extension/2-4-4-Link-Purpose-In-Context-a90dbb2d54434f22a2703aabd066d330?pvs=4"; 
+            }
+           
+            else if (guidelineArray === "2.4.6") {
+                return "https://www.notion.so/ably-extension/2-4-6-Headings-and-Labels-bd2bc9f9a93a4921bb59865a01f97e67?pvs=4"; 
+            }
+            else if (guidelineArray === "2.4.10") {
+                return "https://www.notion.so/ably-extension/2-4-10-Section-Headings-06884c970b054da5bdc703843e47b77b?pvs=4"; 
+            }
+            else if (guidelineArray === "2.5.3") {
+                return "https://www.notion.so/ably-extension/2-5-3-Label-in-Name-4f6b277b327f490f8b7437b8d57f3ed5?pvs=4"; 
+            }
+            else if (guidelineArray === "3.1.1") {
+                return "https://www.notion.so/ably-extension/3-1-1-Language-of-Page-de12f51107464b75bdc7422ffbdf785b?pvs=4"; 
+            }
+            else if (guidelineArray === "3.2.2") {
+                return "https://www.notion.so/ably-extension/3-2-2-On-Input-4031ddf46fe14a449027471d8322c65e?pvs=4"; 
+            }
+            else if (guidelineArray === "3.3.2") {
+                return "https://www.notion.so/ably-extension/3-3-2-Labels-or-Instructions-b3d23746d5974666a190e24c6e2cd435?pvs=4"; 
+            }
+            else if (guidelineArray === "4.1.1") {
+                return "https://www.notion.so/ably-extension/4-1-1-Parsing-ee9d4b0a991a4448b87b82c1dd8a2f5f?pvs=4"; 
+            }
+            else if (guidelineArray === "4.1.2") {
+                return "https://www.notion.so/ably-extension/4-1-2-Name-Role-Value-bc37ee404e244f5f8a99446e3394fb46?pvs=4"; 
+            }
+            else if (guidelineArray === "4.1.3") {
+                return "https://www.notion.so/ably-extension/4-1-3-Status-Messages-1f0c9504dd354e75825d1557af3721ea?pvs=4"; 
+            }
+           
+            // if no matching link is found, return a default value
+            return "https://www.notion.so/ably-extension/Guidelines-6c6bf966a38c4f4c8ae95f6d4c421c44";
+          }
+
+
       
 
         function addError(item, index) {
 			//console.log("guide array = " + guideArray[index] + " item = " + item);
+            const link = getLink(guideArray[index]);
+
             if (guideArray[index].startsWith('1')){
                 // guideArray[index] = Guideline Number
-                onetext += "<span class="+ "list" +">"+ item + " <a href='https://www.boia.org/wcag2/cp/" + guideArray[index] + "'>Learn More</a> </span>";
+
+                onetext += "<span class="+ "list" +">"+ item + " <a href='" + link+ "'>Learn more about SC " + guideArray[index]  +"</a> </span>";
                 x++
 				console.log("item in 1 = " + item);
             }
             else if (guideArray[index].startsWith('2')){
-                twotext += "<span class="+ "list" +">"+ item + " <a href='https://www.boia.org/wcag2/cp/" + guideArray[index] + "'>Learn More</a> </span>";
+                twotext += "<span class="+ "list" +">"+ item + " <a href='" + link+ "'>Learn more about SC " + guideArray[index]  +"</a> </span>";
                 x2++
 
             }
             else if (guideArray[index].startsWith('3')){
-                threetext += "<span class="+ "list" +">"+ item + " <a href='https://www.boia.org/wcag2/cp/" + guideArray[index] + "'>Learn More</a> </span>";
+                threetext += "<span class="+ "list" +">"+ item + "<a href='" + link+ "'>Learn more about SC " + guideArray[index]  +"</a> </span>";
                 x3++
 
             }
             else if (guideArray[index].startsWith('4')){
-                text += "<span class="+ "list" +">"+ item + " <a href='https://www.boia.org/wcag2/cp/" + guideArray[index] + "'>Learn More</a> </span>";
+                text += "<span class="+ "list" +">"+ item + "  <a href='" + link+ "'>Learn more about SC " + guideArray[index]  +"</a> </span>";
                 x4++
-
             }
 
             /** console.log(guideArray[index]);
@@ -722,7 +784,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
     }
 }
 
-  
+
 
 export function deactivate(): Thenable<void> | undefined {
     if (!client) {

@@ -263,8 +263,7 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            "Avoid using sizes that can only be viewed in a specific orientation, try using % for your sizes. Add a media query to cater to other screen sizes.",
-        },
+            "Use % for sizes to ensure compatibility with different orientations and add a media query for other screen sizes.",        },
       ];
     }
     diagnostics.push(diagnostic);
@@ -360,38 +359,6 @@ async function validateTextDocument(textDocument) {
     diagnostics.push(diagnostic);
   }
 
-  // 2.4.7
-  // focus-visible
-  const pattern13 =
-    /([^\r\n,{}]+)(:focus-visible ({[\s\S\n]+?.*?)(.*?-color:.*?)[^>])*(})/g;
-  while (
-    (m = pattern13.exec(text)) &&
-    problems < settings.maxNumberOfProblems
-  ) {
-    problems++;
-    const diagnostic = {
-      severity: node_1.DiagnosticSeverity.Warning,
-      range: {
-        start: textDocument.positionAt(m.index),
-        end: textDocument.positionAt(m.index + m[0].length),
-      },
-      message: `All interactive elements should have a clearly visible focus indicator.`,
-      source: "WCAG 2.1 | 2.4.7",
-    };
-    if (hasDiagnosticRelatedInformationCapability) {
-      diagnostic.relatedInformation = [
-        {
-          location: {
-            uri: textDocument.uri,
-            range: Object.assign({}, diagnostic.range),
-          },
-          message:
-            "Please use clear focus indicators such as background-color or text-color.",
-        },
-      ];
-    }
-    diagnostics.push(diagnostic);
-  }
 
   // Initializations for validator (result is a string containing errors in HTML-Validator)
   const Woptions = {
