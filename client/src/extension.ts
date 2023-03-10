@@ -520,7 +520,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
                         <span id ="uAlert" class="alertCheck">2 alerts
                         </span>
                     </div>
-                    <svg  onclick="pClick()" id="uchevDown"  class="chevronDown" width="10" height="7" viewBox="0 0 10 7" fill="none"
+                    <svg  onclick="uClick()" id="uchevDown"  class="chevronDown" width="10" height="7" viewBox="0 0 10 7" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path id="chevpath" d="M9 1.32257L5 5.32257L1 1.32257" stroke="white" stroke-width="1.5"
                             stroke-linecap="round" stroke-linejoin="round" />
@@ -734,7 +734,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 			var x = document.getElementById("operable");
 
 			if (x.style.display === "none") {
-                document.getElementById("rchevDown").style.transform="rotate(180deg)"
+                document.getElementById("ochevDown").style.transform="rotate(180deg)"
 
 			  x.style.display = "";
 			} else {
