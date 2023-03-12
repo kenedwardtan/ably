@@ -71,8 +71,16 @@ export async function activate(context: vscode.ExtensionContext) {
 
         client.onNotification("custom/loadFiles", (files: Array<string>) => {
             //console.log("loading files " + JSON.stringify(files));
+            console.log(files);
             receivedData = files[0];
             console.log(receivedData);
+
+            const score = receivedData.pop();
+            console.log(receivedData);
+
+            console.log(score); // Output: 3
+
+            
             if (done != 2) {
                 context.subscriptions.push(
                     vscode.window.registerWebviewViewProvider(ColorsViewProvider.viewType, provider));
@@ -80,7 +88,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
 
             done = 2;
-            //fix this?
             provider.callView();
 
 

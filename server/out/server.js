@@ -17,6 +17,58 @@ const documents = new node_1.TextDocuments(
 let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 let hasDiagnosticRelatedInformationCapability = false;
+
+function countAttributes(html) {
+  const rules = [
+    { name: 'area', score: 1 },
+    { name: 'background-position-x', score: 1 },
+    { name: 'background-position-y', score: 1 },
+    { name: 'background-size', score: 1 },
+    { name: 'border-radius', score: 1 },
+    { name: 'button', score: 1 },
+    { name: 'font-size', score: 3 },
+    { name: 'height', score: 1 },
+    { name: 'html', score: 1 },
+    { name: 'img', score: 1 },
+    { name: 'input', score: 5 },
+    { name: 'left', score: 1 },
+    { name: 'letter-spacing', score: 1 },
+    { name: 'line-height', score: 1 },
+    { name: 'margin', score: 1 },
+    { name: 'max-height', score: 1 },
+    { name: 'max-width', score: 1 },
+    { name: 'min-height', score: 1 },
+    { name: 'min-width', score: 1 },
+    { name: 'opacity', score: 1 },
+    { name: 'outline-offset', score: 1 },
+    { name: 'padding', score: 1 },
+    { name: 'right', score: 1 },
+    { name: 'select', score: 3 },
+    { name: 'text-indent', score: 1 },
+    { name: 'textarea', score: 1 },
+    { name: 'title', score: 1 },
+    { name: 'top', score: 1 },
+    { name: 'transform-origin', score: 1 },
+    { name: 'width', score: 1 },
+    { name: 'z-index', score: 1 },
+  ];
+
+  const counts = {};
+  let total = 0;
+  for (const { name, score } of rules) {
+    const regex = new RegExp(`<${name}[^>]*>`, 'gi');
+    const count = (html.match(regex) || []).length;
+    counts[name] = count;
+    total += count * score;
+    console.log(counts);
+  }
+  return total;
+}
+
+
+
+
+
 connection.onInitialize((params) => {
   const capabilities = params.capabilities;
   // Does the client support the `workspace/configuration` request?
@@ -357,6 +409,7 @@ async function validateTextDocument(textDocument) {
       ];
     }
     diagnostics.push(diagnostic);
+    
   }
 
 
@@ -608,13 +661,33 @@ async function validateTextDocument(textDocument) {
 
 
 
-  var files = diagnostics;
+var files = diagnostics ;
 
-  connection.sendNotification("custom/loadFiles", [files]);
+const html = text;
+const score = countAttributes(html);
+
+console.log("SCORE");
+console.log(score); // Output: 14
+
+
+
+
+
+
+var files = diagnostics;
+files.push(score);
+
+
+connection.sendNotification("custom/loadFiles", [files]);
+
 
 
 
 }
+
+
+
+
 connection.onDidChangeWatchedFiles((_change) => {
   // Monitored files have change in VSCode
   connection.console.log("We received an file change event");
