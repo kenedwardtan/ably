@@ -47,12 +47,12 @@ async function activate(context) {
     client.onReady().then(() => {
         client.onNotification("custom/loadFiles", (files) => {
             //console.log("loading files " + JSON.stringify(files));
-            console.log(files);
+            // console.log(files);
             receivedData = files[0];
-            console.log(receivedData);
-            const score = receivedData.pop();
-            console.log(receivedData);
-            console.log(score); // Output: 3
+            // console.log(receivedData);
+            //const score = receivedData.pop();
+            // console.log(receivedData);
+            //console.log("SCORE "+score); // Output: 3
             if (done != 2) {
                 context.subscriptions.push(vscode.window.registerWebviewViewProvider(ColorsViewProvider.viewType, provider));
             }
@@ -63,6 +63,7 @@ async function activate(context) {
 }
 exports.activate = activate;
 let dataLength = 0;
+const TotalScore = 0;
 const tryArray = [];
 class ColorsViewProvider {
     constructor(_extensionUri) {
@@ -98,6 +99,8 @@ class ColorsViewProvider {
         webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
     }
     _getHtmlForWebview(webview) {
+        const score = receivedData.pop();
+        console.log("SCORE: " + score);
         let messageArray = [];
         messageArray = receivedData.map(item => item.relatedInformation[0].message);
         let errorArray = [];
@@ -127,6 +130,7 @@ class ColorsViewProvider {
         guidelinesString = extractedValues.join(' + ');
         console.log(stringArray);
         dataLength = receivedData.length;
+        console.log(receivedData);
         return `
 		<!DOCTYPE html>
 <html>
@@ -458,7 +462,7 @@ class ColorsViewProvider {
                         <span id ="uAlert" class="alertCheck">2 alerts
                         </span>
                     </div>
-                    <svg  onclick="pClick()" id="uchevDown"  class="chevronDown" width="10" height="7" viewBox="0 0 10 7" fill="none"
+                    <svg  onclick="uClick()" id="uchevDown"  class="chevronDown" width="10" height="7" viewBox="0 0 10 7" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path id="chevpath" d="M9 1.32257L5 5.32257L1 1.32257" stroke="white" stroke-width="1.5"
                             stroke-linecap="round" stroke-linejoin="round" />
@@ -515,11 +519,13 @@ class ColorsViewProvider {
 
 
     <script>
-        let dataLength1 = ${dataLength};
+        // Total of Errors
+        let ErrorTotal = ${dataLength};
 
-       
-        console.log("hello");
-        document.getElementById("dataContainer").innerHTML = dataLength1;
+        // Total of Elements and their Scoring
+        let totalScore = ${score};
+
+        document.getElementById("dataContainer").innerHTML = ErrorTotal;
 
         var newArray = [];
 

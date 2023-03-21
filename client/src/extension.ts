@@ -71,14 +71,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
         client.onNotification("custom/loadFiles", (files: Array<string>) => {
             //console.log("loading files " + JSON.stringify(files));
-            console.log(files);
+           // console.log(files);
             receivedData = files[0];
-            console.log(receivedData);
+           // console.log(receivedData);
 
-            const score = receivedData.pop();
-            console.log(receivedData);
+            //const score = receivedData.pop();
+           // console.log(receivedData);
 
-            console.log(score); // Output: 3
+            //console.log("SCORE "+score); // Output: 3
 
             
             if (done != 2) {
@@ -99,6 +99,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 }
 let dataLength = 0;
+const TotalScore = 0; 
 const tryArray = [];
 
 
@@ -156,8 +157,8 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
     }
 
     private _getHtmlForWebview(webview: vscode.Webview) {
-
-
+        const score = receivedData.pop();
+        console.log("SCORE: " + score);
 
         let messageArray = [];
         messageArray = receivedData.map(item => item.relatedInformation[0].message);
@@ -193,8 +194,11 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
         let guidelinesString = "";
         guidelinesString = extractedValues.join(' + ');
 
+        
         console.log(stringArray);
         dataLength = receivedData.length;
+    
+        console.log(receivedData); 
 
         return `
 		<!DOCTYPE html>
@@ -527,7 +531,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
                         <span id ="uAlert" class="alertCheck">2 alerts
                         </span>
                     </div>
-                    <svg  onclick="pClick()" id="uchevDown"  class="chevronDown" width="10" height="7" viewBox="0 0 10 7" fill="none"
+                    <svg  onclick="uClick()" id="uchevDown"  class="chevronDown" width="10" height="7" viewBox="0 0 10 7" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path id="chevpath" d="M9 1.32257L5 5.32257L1 1.32257" stroke="white" stroke-width="1.5"
                             stroke-linecap="round" stroke-linejoin="round" />
@@ -584,11 +588,13 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 
 
     <script>
-        let dataLength1 = ${dataLength};
+        // Total of Errors
+        let ErrorTotal = ${dataLength};
 
-       
-        console.log("hello");
-        document.getElementById("dataContainer").innerHTML = dataLength1;
+        // Total of Elements and their Scoring
+        let totalScore = ${score};
+
+        document.getElementById("dataContainer").innerHTML = ErrorTotal;
 
         var newArray = [];
 

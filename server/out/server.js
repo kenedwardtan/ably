@@ -55,12 +55,24 @@ function countAttributes(html) {
 
   const counts = {};
   let total = 0;
+
   for (const { name, score } of rules) {
     const regex = new RegExp(`<${name}[^>]*>`, 'gi');
     const count = (html.match(regex) || []).length;
     counts[name] = count;
     total += count * score;
-    console.log(counts);
+    console.log(count);
+    console.log("elements");
+   
+  }
+  for (const { name, score } of rules) {
+    const regex = new RegExp(`${name}:`, 'gi');
+    const count = (html.match(regex) || []).length;
+    console.log(count);
+    counts[name] = count;
+    console.log(count);
+    total += count * score;
+  
   }
   return total;
 }
@@ -667,6 +679,7 @@ const html = text;
 const score = countAttributes(html);
 
 console.log("SCORE");
+
 console.log(score); // Output: 14
 
 
