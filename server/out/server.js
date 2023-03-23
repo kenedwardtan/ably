@@ -26,7 +26,7 @@ function countAttributes(html) {
     { name: 'background-size', score: 1 },
     { name: 'border-radius', score: 1 },
     { name: 'button', score: 1 },
-    { name: 'font-size', score: 3 },
+    { name: 'font-size', score: 1 },
     { name: 'height', score: 1 },
     { name: 'html', score: 1 },
     { name: 'img', score: 1 },
@@ -36,7 +36,6 @@ function countAttributes(html) {
     { name: 'line-height', score: 1 },
     { name: 'margin', score: 1 },
     { name: 'max-height', score: 1 },
-    { name: 'max-width', score: 1 },
     { name: 'min-height', score: 1 },
     { name: 'min-width', score: 1 },
     { name: 'opacity', score: 1 },
@@ -61,18 +60,18 @@ function countAttributes(html) {
     const count = (html.match(regex) || []).length;
     counts[name] = count;
     total += count * score;
-    console.log(count);
-    console.log("elements");
-   
+   // console.log(count);
+    //console.log("elements");
+
   }
   for (const { name, score } of rules) {
     const regex = new RegExp(`${name}:`, 'gi');
     const count = (html.match(regex) || []).length;
-    console.log(count);
+    //console.log(count);
     counts[name] = count;
-    console.log(count);
+    //console.log(count);
     total += count * score;
-  
+
   }
   return total;
 }
@@ -173,6 +172,7 @@ async function validateTextDocument(textDocument) {
   // In this simple example we get the settings for every validate run.
   const settings = await getDocumentSettings(textDocument.uri);
   const text = textDocument.getText();
+
 
   let m;
   let problems = 0;
@@ -418,13 +418,12 @@ async function validateTextDocument(textDocument) {
     diagnostics.push(diagnostic);
   }
 
-
   // 1.3.4
   // Checks if background-position-x, background-position-y, background-size, 
   // border-radius, font-size, height, left, letter-spacing, line-height, margin, 
   // max-height, max-width, min-height, min-width, opacity, outline-offset, padding, right, 
   // text-indent, top, transform-origin, width, and z-index uses px
-  const pattern1341 = /(background-position-x|background-position-y|background-size|border-radius|font-size|height|left|letter-spacing|line-height|margin|max-height|max-width|min-height|min-width|opacity|outline-offset|padding|right|text-indent|top|transform-origin|width|z-index):.*?\d+px.*?/g;
+  const pattern1341 = /(background-position-x|background-position-y|background-size|border-radius|height|left|letter-spacing|line-height|margin|max-height|min-height|min-width|opacity|outline-offset|padding|right|text-indent|top|transform-origin|(?<!max-)(width)|z-index):.*?\d+px.*?/g;
   while ((m = pattern1341.exec(text)) && problems < settings.maxNumberOfProblems) {
     problems++;
     const diagnostic = {
@@ -444,12 +443,13 @@ async function validateTextDocument(textDocument) {
             range: Object.assign({}, diagnostic.range),
           },
           message:
-            "Use % for sizes to ensure compatibility with different orientations and add a media query for other screen sizes.",        
-          },
+            "Use % for sizes to ensure compatibility with different orientations and add a media query for other screen sizes.",
+        },
       ];
     }
     diagnostics.push(diagnostic);
   }
+
 
 
   // 1.3.5 - Identify Input Purpose
@@ -509,7 +509,7 @@ async function validateTextDocument(textDocument) {
     }
     diagnostics.push(diagnostic);
   }
-  
+
 
   // 1.4.4
   // font-size shouldn't use px or pt
@@ -605,7 +605,7 @@ async function validateTextDocument(textDocument) {
       ];
     }
     diagnostics.push(diagnostic);
-    
+
   }
 
 
@@ -755,17 +755,12 @@ async function validateTextDocument(textDocument) {
     }
     diagnostics.push(diagnostic);
   }
-
-
-
-  // Initializations for validator (result is a string containing errors in HTML-Validator)
   const Woptions = {
     data: text,
     validator: 'WHATWG',
     format: "text",
   };
   const Wresult = await validator(Woptions);
-  //console.log(Wresult.errors); // for debugging
 
   let WerrorMessages = '';
 
@@ -773,10 +768,6 @@ async function validateTextDocument(textDocument) {
     const errorMessage = `Error: ${error.message}\nFrom line ${error.line}, column ${error.column}; to line ${error.line}, column ${error.offset + 1}\n`;
     WerrorMessages += errorMessage;
   });
-  //console.log("----------- WHATWG START ------- ")
-  //console.log(WerrorMessages);
-  //console.log("----------- WHATWG END ------- ")
-
 
   // Initializations for validator (result is a string containing errors in HTML-Validator)
   const options = {
@@ -784,6 +775,7 @@ async function validateTextDocument(textDocument) {
     format: "text",
   };
   const result = await validator(options);
+
   //console.log(result); // for debugging
 
   // Split result into array of strings for easier checking
@@ -795,7 +787,7 @@ async function validateTextDocument(textDocument) {
 
   //const errors = result.split("\n");
   const errors = tryerrors;
-  console.log(errors);
+  // console.log(errors);
 
   //console.log("~~~~ COMBINED ~~~~")
   //console.log(combinedErrors);
@@ -820,7 +812,6 @@ async function validateTextDocument(textDocument) {
     let suggestMsg;
     let source;
 
-
     // 1.1.1 - img alt
     if (error.includes("An “img” element must have an “alt” attribute")) {
       errorMsg = "Image elements should have an alt attribute.";
@@ -828,31 +819,34 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 1.1.1";
     }
 
-
-    // 1.1.1 - area alt
-    else if (error.includes("Element “area” is missing required attribute “alt”")) {
-      errorMsg = "Area elements should have an alt attribute.";
-      suggestMsg = "Please add an `alt` attribute to your area element to ensure accessibility.";
-      source = "WCAG 2.1 | 1.1.1";
+    else if (
+      // 4.1.1.2
+      error.includes("Unclosed element") ||
+      error.includes("Stray end tag")
+    ) {
+      errorMsg = "Element must have a proper opening/closing tag.";
+      suggestMsg = "Please add the appropriate HTML tag to complete.";
+      source = "WCAG 2.1 | 4.1.1";
     }
 
-    else if (error.includes("Element “area” is missing required attribute “href”")) {
-      errorMsg = "Area elements should have an href attribute.";
-      suggestMsg = "Make sure there is an `href` present in your area element.";
-      source = "WCAG 2.1 | 1.1.1";
-    }
+    // 4.1.1 - Duplicate ID
 
+    else if (error.includes("Duplicate ID")) {
+      errorMsg = "Element must have unique IDs.";
+      suggestMsg = "Please make sure all your attributes have different and unique IDs.";
+      source = "WCAG 2.1 | 4.1.1";
+    }
 
     // 2.4.2 - Page Title
     else if (error.includes("Element “title” must not be empty.")) {
       errorMsg = "Element title cannot be empty, must have text content";
-      suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
+      suggestMsg = "Please add a descriptive title to your content.";
       source = "WCAG 2.1 | 2.4.2";
     }
 
     else if (error.includes("missing a required instance of child element")) {
       errorMsg = "Element title cannot be empty, must have text content";
-      suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
+      suggestMsg = "Please add a descriptive title to your content.";
       source = "WCAG 2.1 | 2.4.2";
     }
 
@@ -861,9 +855,31 @@ async function validateTextDocument(textDocument) {
       suggestMsg = "Please add a descriptive and concise title to your web page using the 'title' element within the 'head' section.";
       source = "WCAG 2.1 | 2.4.2";
     }
+    // 3.1.1 - Language of Parts
 
+    else if (error.includes("Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.")) {
+      errorMsg =
+        "You must programatically define the primary language of each page.";
+      suggestMsg =
+        "Please add a lang attribute to the HTML tag and state the primary language.";
+      source = "WCAG 2.1 | 3.1.1";
+    }
+
+    // 1.1.1 - Area alt
+    else if (error.includes("Element “area” is missing required attribute “alt”")) {
+      errorMsg = "'Area' elements should have an alt attribute.";
+      suggestMsg = "Please add an `alt` attribute to your area element to ensure accessibility.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    else if (error.includes("Element “area” is missing required attribute “href”")) {
+      errorMsg = "'Area' elements should have an href attribute.";
+      suggestMsg = "Make sure there is an `href` present in your area element.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
 
     // 1.1.1 - Input Missing Label
+
     else if (error.includes("<input> element does not have a <label>")) {
       errorMsg = "Input is missing a label";
       suggestMsg = "Please add a label attribute to your input.";
@@ -878,24 +894,28 @@ async function validateTextDocument(textDocument) {
       source = "WCAG 2.1 | 2.4.2";
     }
 
-
     // 2.4.4 - Link Purpose
+
     else if (error.includes("Anchor link must have a text describing its purpose")) {
       errorMsg = "Anchor link must have a text describing its purpose.";
-      suggestMsg = "Please add either an alt attribute inside your anchor link or a text describing it.";
+      suggestMsg = "Please add either an `alt` tribute inside your anchor link or a text describing it.";
       source = "WCAG 2.1 | 2.4.4";
     }
-    
 
-    // 2.4.6 - Headings and Labels
-    else if (error.includes("Empty Heading")) {
+
+    // 2.4.6: Headings and Labels - Empty Heading
+
+    else if (
+      error.includes("Empty Heading")
+    ) {
       errorMsg = "Headings cannot be empty.";
       suggestMsg = "Please make sure to provide descriptive headings for your content.";
       source = "WCAG 2.1 | 2.4.6";
     }
-      
 
-    //2.4.10 - Section Headings
+
+    //2.4.10
+
     else if (error.includes("Heading level can only increase by one, expected <h2> but got <h3>")) {
       errorMsg = "Heading level can only increase by one.";
       suggestMsg = "Please check if your headings start at h1 and if it only increases one level at a time. (h1>h6)";
@@ -903,21 +923,36 @@ async function validateTextDocument(textDocument) {
     }
 
 
+
+
+    // 1.1.1 - Area alt
+    else if (error.includes("Element “area” is missing required attribute “alt”")) {
+      errorMsg = "'Area' elements should have an alt attribute.";
+      suggestMsg = "Please add an `alt` attribute to your area element to ensure accessibility.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
+    else if (error.includes("Element “area” is missing required attribute “href”")) {
+      errorMsg = "'Area' elements should have an href attribute.";
+      suggestMsg = "Make sure there is an `href` present in your area element.";
+      source = "WCAG 2.1 | 1.1.1";
+    }
+
     // 1.1.1 - Input Missing Label
+
     else if (error.includes("<input> element does not have a <label>")) {
       errorMsg = "Input is missing a label";
       suggestMsg = "Please add a label attribute to your input.";
       source = "WCAG 2.1 | 1.1.1";
     }
 
-
     // 3.2.2 - Input Missing Label
-    else if (error.includes("<form> element must have a submit button")) {
-    errorMsg = "Form elements must have a submit button";
-    suggestMsg = "Please add a submit button to your form group.";
-    source = "WCAG 2.1 | 1.1.1";
-    }
 
+    else if (error.includes("<form> element must have a submit button")) {
+      errorMsg = "Form elements must have a submit button";
+      suggestMsg = "Please add submit button on your form group.";
+      source = "WCAG 2.1 | 3.2.2";
+    }
 
     // 3.3.2 - Labels or Instructions
     else if (error.includes("<textarea> element does not have a <label>")) {
@@ -936,24 +971,6 @@ async function validateTextDocument(textDocument) {
       errorMsg = "Select is missing a label";
       suggestMsg = "Please add a label attribute to your input.";
       source = "WCAG 2.1 | 3.3.2";
-    }
-
-
-    // 4.1.1 - Parsing
-    else if (error.includes("Duplicate ID")) {
-      errorMsg = "Element must have unique IDs.";
-      suggestMsg = "Please make sure all your attributes have different and unique IDs.";
-      source = "WCAG 2.1 | 4.1.1";
-    }
-
-    // stray opening/closing tag
-    else if (
-      error.includes("Unclosed element") ||
-      error.includes("Stray end tag")
-    ) {
-      errorMsg = "Element must have a proper opening/closing tag.";
-      suggestMsg = "Please add the appropriate HTML tag to complete.";
-      source = "WCAG 2.1 | 4.1.1";
     }
 
 
@@ -995,25 +1012,25 @@ async function validateTextDocument(textDocument) {
 
 
 
-var files = diagnostics ;
+  var files = diagnostics;
 
-const html = text;
-const score = countAttributes(html);
+  const html = text;
+  const score = countAttributes(html);
 
-console.log("SCORE");
+//  console.log("SCORE");
 
-console.log(score); // Output: 14
-
-
+//  console.log(score); // Output: 14
 
 
 
 
-var files = diagnostics;
-files.push(score);
 
 
-connection.sendNotification("custom/loadFiles", [files]);
+  var files = diagnostics;
+  files.push(score);
+
+
+  connection.sendNotification("custom/loadFiles", [files]);
 
 
 
