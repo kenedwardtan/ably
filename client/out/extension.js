@@ -49,7 +49,7 @@ async function activate(context) {
             //console.log("loading files " + JSON.stringify(files));
             // console.log(files);
             receivedData = files[0];
-            // console.log(receivedData);
+            console.log(receivedData);
             //const score = receivedData.pop();
             // console.log(receivedData);
             //console.log("SCORE "+score); // Output: 3
@@ -64,6 +64,7 @@ async function activate(context) {
 exports.activate = activate;
 let dataLength = 0;
 const TotalScore = 0;
+const scorePercent = 0;
 const tryArray = [];
 class ColorsViewProvider {
     constructor(_extensionUri) {
@@ -248,21 +249,21 @@ class ColorsViewProvider {
             display: inline-block;
             margin: 10px;
             padding-left: 32px;
-            padding-top: 4px;
+            padding-top: 8px;
         }
 
         .ably-score-circle {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background-color: #f2f0f1;
         }
 
         .ably-score-value {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: bold;
             color: #e22f65;
         }
@@ -416,11 +417,11 @@ class ColorsViewProvider {
     <div class="content">
         <div class="title-sec">
             <div class="logo">
-            <img src="https://tinypic.host/images/2023/03/26/ABLY_LogoPrimary3x.png" alt="ABLY_LogoPrimary3x.png" border="0" style="width: 1em"/>
+            <img src="https://tinypic.host/images/2023/03/26/ABLY_LogoPrimary3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
                 <p class="title-name"> Ab.ly </p>
                 <div class="ably-score">
                     <div class="ably-score-circle">
-                        <span class="ably-score-value">1</span>
+                        <span class="ably-score-value">1</span> <span style="color: #e22f65; font-size: 8px">%</span>
                     </div>
             </div>
             </div>
@@ -552,11 +553,16 @@ class ColorsViewProvider {
         // Total of Elements and their Scoring
         let totalScore = ${score};
 
+        // Final Score Percentage
+        let scorePercent = 100 - Math.round((ErrorTotal / totalScore) * 100);
+
+        console.log(scorePercent);
+
         // Get the ably score element
         var ablyScore = document.querySelector('.ably-score-value');
 
         // Set the score value
-        ablyScore.innerHTML = totalScore;
+        ablyScore.innerHTML = scorePercent;
 
         document.getElementById("dataContainer").innerHTML = ErrorTotal;
 
