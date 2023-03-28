@@ -1,38 +1,60 @@
-# LSP Example
+# AB.LY Extension
 
-Heavily documented sample code for https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
+Thank you for installing the AB.LY Extension.
+This is an extension developed by **Bryan Camarillo**, **Keil Finez**, **Pamela Olalia**, and **Kenneth Tan** aimed to help developers like yourself make more accessible code.
 
-## Functionality
+## What is accessible code?
 
-This Language Server works for plain text file. It has the following language features:
-- Completions
-- Diagnostics regenerated on each file change or configuration change
+We define accessible code as code that follows the existing _Web Content Accessibility Guidelines 2.1_ (WCAG 2.1) which allows users with disabilities to use websites and web apps with minimal third party solutions. Developing accessible code helps all users of the internet to use, navigate, and interact with sites and apps by making them more structured and properly labeled.
 
-It also includes an End-to-End test.
+## How do people with disabilities use, navigate, and interact with sites and apps?
 
-## Structure
+People with disabilities, particularly those with impaired vision, do these tasks with the help of assistive tools like screen-readers. Screen-readers help these people dictate which part of a website they're in, as well as what it contents are not just visually but structurally. What does that mean? If sites and apps are coded with accessibility in mind, people with disabilities are guided with what contents are available, whether it may be buttons, headers, forms, and images.
 
-```
-.
-├── client // Language Client
-│   ├── src
-│   │   ├── test // End to End tests for Language Client / Server
-│   │   └── extension.ts // Language Client entry point
-├── package.json // The extension manifest.
-└── server // Language Server
-    └── src
-        └── server.ts // Language Server entry point
-```
+## What does this extension do?
 
-## Running the Sample
+Now that you've installed this extension, this will help you spot your inaccessible code as its purpose is to _lint_ or mark a particular line of code and offer you suggestions as to how you can make them accessible. The features provided in this extension will hopefully help you spot inaccessible code in your project and provide helpful suggestions as to how you can improve your project's accessibility.
 
-- Run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
-- Open VS Code on this folder.
-- Press Ctrl+Shift+B to start compiling the client and server in [watch mode](https://code.visualstudio.com/docs/editor/tasks#:~:text=The%20first%20entry%20executes,the%20HelloWorld.js%20file.).
-- Switch to the Run and Debug View in the Sidebar (Ctrl+Shift+D).
-- Select `Launch Client` from the drop down (if it is not already).
-- Press ▷ to run the launch config (F5).
-- If you want to debug the server as well, use the launch configuration `Attach to Server`
-- In the [Extension Development Host](https://code.visualstudio.com/api/get-started/your-first-extension#:~:text=Then%2C%20inside%20the%20editor%2C%20press%20F5.%20This%20will%20compile%20and%20run%20the%20extension%20in%20a%20new%20Extension%20Development%20Host%20window.) instance of VSCode, open a document in 'plain text' language mode.
-  - Type `j` or `t` to see `Javascript` and `TypeScript` completion.
-  - Enter text content such as `AAA aaa BBB`. The extension will emit diagnostics for all words in all-uppercase.
+## What does this look like?
+
+There are two features that you want to focus your attention on when using this extension. The first feature that this extension provides is linting where it marks or underlines your inaccessible code, the second is a sidebar that keeps track of the amount of inaccessible code you have as well as a scoring feature that is based on said amount.
+
+Since you've successfully installed this extension, let's introduce what your environment should look like.
+
+!["sample environment in vscode"](images/ably01.png)
+
+Figure 1. Sample environment in VSCode
+
+The current page shows an existing HTML with pre-written _inaccessible_ code. Let's mark each section that needs attention.
+
+!["labeled sections in the sample environment"](images/ably02.png)
+
+Figure 2. Labeled sections in the sample environment
+
+The orange arrows direct to lines that are linted. In this case, there are four (4) lines that show underlines underneath, indicating that they are inaccessible. This is then related to the warning report at the bottom which show what **accessibility guideline is violated**, which **line and column** do they occur (indicated by the lint), and a **suggestion** on how to resolve the violation. At the left, there is a sidebar that indicates the inaccessible code, the line where it occurs, the same suggestion in the warning report, and the score indicated inside the colored box.
+
+### Linting
+
+!["lint example and its corresponding warning"](images/ably03.png)
+
+Figure 3. Linted code with its corresponding warning
+
+This is what linting looks like. It's a jagged line underneath a line of code that violates the accessibility guidelines. Each line corresponds to a warning that's indicated below. These warnings occur in the same order as the violated code, meaning from top to bottom.
+
+### AB.LY Sidebar
+
+!["ab.ly sidebar contents"](images/ably04.png)
+
+Figure 4. AB.LY sidebar
+
+This is what the sidebar looks like.
+
+## Others
+
+This extension was built upon Microsoft's implementation of the Language Server Protocol. This implementation allows the communication of the client side (developer side) and the server side (backend side) to allow the two aforementioned features to work.
+
+Here is the documented sample code in which this extension was based on, as well as all related technical information regarding its implementation: https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
+
+## Disclaimer
+
+This extension is accomplished in accordance to the creators' thesis submission. Note that this may have incomplete features that is not accounted for. This is to mainly provide an idea that helping developers through real-time assistance as well as learning may be provided through this extension, and is subject for more further improvements when possible.
