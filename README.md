@@ -5,19 +5,19 @@ This is an extension developed by **Bryan Camarillo**, **Keil Finez**, **Pamela 
 
 ## What is accessible code?
 
-We define accessible code as code that follows the existing _Web Content Accessibility Guidelines 2.1_ (WCAG 2.1) which allows users with disabilities to use websites and web apps with minimal third party solutions. Developing accessible code helps all users of the internet to use, navigate, and interact with sites and apps by making them more structured and properly labeled.
+We define accessible code as code that follows the existing _Web Content Accessibility Guidelines 2.1_ (WCAG 2.1) which allows users with a wide range of abilities and disabilities to use websites and web apps without excessive dependence on third party workarounds. Developing accessible code helps all users of the internet to use, navigate, and interact with sites and apps by making them more structured and properly labeled.
 
 ## How do people with disabilities use, navigate, and interact with sites and apps?
 
-People with disabilities, particularly those with impaired vision, do these tasks with the help of assistive tools like screen-readers. Screen-readers help these people dictate which part of a website they're in, as well as what it contents are not just visually but structurally. What does that mean? If sites and apps are coded with accessibility in mind, people with disabilities are guided with what contents are available, whether it may be buttons, headers, forms, and images.
+People with disabilities, particularly those with impaired vision, do these tasks with the help of assistive tools like screen-readers—which help these people dictate which part of a website they're in, as well as what it contents are not just visually but structurally. What does that mean? If sites and apps are coded with accessibility in mind, people with disabilities are guided with what contents are available, whether it may be buttons, headers, forms, and images.
 
 ## What does this extension do?
 
-Now that you've installed this extension, this will help you spot your inaccessible code as its purpose is to _lint_ or mark a particular line of code and offer you suggestions as to how you can make them accessible. The features provided in this extension will hopefully help you spot inaccessible code in your project and provide helpful suggestions as to how you can improve your project's accessibility.
+Now that you've installed this extension, this will help you spot inaccessible code as its purpose is to _lint_ or mark a particular line of code and offer you suggestions as to how you can make them accessible. The features provided in this extension will hopefully guide you throughout your project—in terms of accessibility.
 
 ## What does this look like?
 
-There are two features that you want to focus your attention on when using this extension. The first feature that this extension provides is linting where it marks or underlines your inaccessible code, the second is a sidebar that keeps track of the amount of inaccessible code you have as well as a scoring feature that is based on said amount.
+There are two features that you want to focus your attention on when using this extension. The first feature that this extension provides is linting where it marks or underlines your inaccessible code, while the second one is a sidebar that keeps track of the number of accessibility violations you have as well as a scoring feature that is based on said number.
 
 Since you've successfully installed this extension, let's introduce what your environment should look like.
 
