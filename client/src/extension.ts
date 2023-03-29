@@ -73,7 +73,7 @@ export async function activate(context: vscode.ExtensionContext) {
             //console.log("loading files " + JSON.stringify(files));
            // console.log(files);
             receivedData = files[0];
-           // console.log(receivedData);
+            console.log(receivedData);
 
             //const score = receivedData.pop();
            // console.log(receivedData);
@@ -100,6 +100,7 @@ export async function activate(context: vscode.ExtensionContext) {
 }
 let dataLength = 0;
 const TotalScore = 0; 
+const scorePercent = 0;
 const tryArray = [];
 
 
@@ -313,6 +314,37 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 
         }
 
+        .ably-score {
+            display: inline-block;
+            margin: 10px;
+            padding-left: 32px;
+            padding-top: 8px;
+        }
+
+        .ably-score-circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #f2f0f1;
+        }
+
+        .ably-score-value {
+            font-size: 14px;
+            font-weight: bold;
+            color: #e22f65;
+        }
+
+        .ably-score-label {
+            display: block;
+            font-size: 8px;
+            color: #999;
+            text-align: center;
+            margin-top: 5px;
+        }
+
         .suggestNum {
             display: flex;
 			justify-content:center;
@@ -325,7 +357,6 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
         }
 
         .noSuggest {
-
             font-family: 'DM Sans';
             font-style: normal;
             font-weight: 800;
@@ -455,16 +486,13 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
     <div class="content">
         <div class="title-sec">
             <div class="logo">
-                <svg class="logosvg" width="21" height="21" viewBox="0 0 21 21" fill="none"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="10.4516" cy="10.1613" r="10.1613" fill="#0AA1D1" />
-                    <path
-                        d="M10.4515 6.43547C10.8557 6.43547 11.2434 6.27489 11.5293 5.98905C11.8151 5.7032 11.9757 5.31552 11.9757 4.91128C11.9757 4.50704 11.8151 4.11935 11.5293 3.83351C11.2434 3.54767 10.8557 3.38708 10.4515 3.38708C10.0472 3.38708 9.65956 3.54767 9.37372 3.83351C9.08788 4.11935 8.92729 4.50704 8.92729 4.91128C8.92729 5.31552 9.08788 5.7032 9.37372 5.98905C9.65956 6.27489 10.0472 6.43547 10.4515 6.43547ZM6.48858 4.8625C6.11594 4.70472 5.69606 4.70046 5.32029 4.85067C4.94452 5.00087 4.64327 5.29339 4.48207 5.66457C4.40234 5.84842 4.35983 6.04624 4.35697 6.24661C4.35411 6.44698 4.39096 6.64593 4.46541 6.83198C4.53985 7.01803 4.65041 7.18749 4.7907 7.33058C4.93099 7.47367 5.09824 7.58756 5.28278 7.66567L7.33062 8.53547C7.45306 8.58733 7.55753 8.67408 7.63101 8.7849C7.70449 8.89573 7.74373 9.02573 7.74384 9.1587V11.2181L6.47029 14.9147C6.40513 15.104 6.37788 15.3042 6.39011 15.504C6.40233 15.7038 6.45379 15.8993 6.54154 16.0792C6.62929 16.2591 6.75162 16.4199 6.90154 16.5526C7.05146 16.6852 7.22603 16.787 7.41529 16.8522C7.60456 16.9173 7.8048 16.9446 8.00459 16.9323C8.20438 16.9201 8.39981 16.8687 8.57972 16.7809C8.94306 16.6037 9.22111 16.2894 9.35271 15.9071L10.2916 13.1812C10.3032 13.1481 10.3248 13.1193 10.3535 13.099C10.3821 13.0787 10.4164 13.0677 10.4515 13.0677C10.4866 13.0677 10.5209 13.0787 10.5495 13.099C10.5782 13.1193 10.5998 13.1481 10.6114 13.1812L11.5503 15.9071C11.6819 16.2894 11.9599 16.6037 12.3233 16.7809C12.6866 16.9581 13.1054 16.9838 13.4877 16.8522C13.8699 16.7205 14.1842 16.4425 14.3614 16.0792C14.5387 15.7158 14.5643 15.297 14.4327 14.9147L13.1625 11.2181V9.15734C13.1626 9.02437 13.2019 8.89437 13.2753 8.78355C13.3488 8.67272 13.4533 8.58598 13.5757 8.53412L15.6202 7.66567C15.8047 7.58749 15.9719 7.47356 16.1121 7.33044C16.2523 7.18732 16.3628 7.01785 16.4372 6.83181C16.5115 6.64577 16.5483 6.44684 16.5454 6.2465C16.5425 6.04616 16.5 5.84838 16.4202 5.66457C16.259 5.29355 15.9579 5.00117 15.5823 4.85098C15.2067 4.70078 14.787 4.70493 14.4144 4.8625L13.3265 5.3245C13.0961 5.42205 12.9349 5.61105 12.8556 5.81902C12.6711 6.30737 12.3422 6.72793 11.9127 7.02474C11.4832 7.32156 10.9735 7.48054 10.4515 7.48054C9.92943 7.48054 9.41974 7.32156 8.99027 7.02474C8.56079 6.72793 8.23189 6.30737 8.04733 5.81902C8.0063 5.70908 7.94343 5.60858 7.86252 5.52359C7.7816 5.4386 7.68431 5.37088 7.57652 5.3245L6.48858 4.8625Z"
-                        fill="white" />
-                </svg>
+            <img src="https://tinypic.host/images/2023/03/26/ABLY_LogoPrimary3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
                 <p class="title-name"> Ab.ly </p>
-
-
+                <div class="ably-score">
+                    <div class="ably-score-circle">
+                        <span class="ably-score-value">1</span> <span style="color: #e22f65; font-size: 8px">%</span>
+                    </div>
+            </div>
             </div>
 
             <h1> Accessibility Insights </h1>
@@ -594,6 +622,17 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
         // Total of Elements and their Scoring
         let totalScore = ${score};
 
+        // Final Score Percentage
+        let scorePercent = 100 - Math.round((ErrorTotal / totalScore) * 100);
+
+        console.log(scorePercent);
+
+        // Get the ably score element
+        var ablyScore = document.querySelector('.ably-score-value');
+
+        // Set the score value
+        ablyScore.innerHTML = scorePercent;
+
         document.getElementById("dataContainer").innerHTML = ErrorTotal;
 
         var newArray = [];
@@ -691,14 +730,14 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
            
             // if no matching link is found, return a default value
             return "https://www.notion.so/ably-extension/Guidelines-6c6bf966a38c4f4c8ae95f6d4c421c44";
-          }
+        }
 
 
-      
 
         function addError(item, index) {
 			//console.log("guide array = " + guideArray[index] + " item = " + item);
             const link = getLink(guideArray[index]);
+
 
             if (guideArray[index].startsWith('1')){
                 // guideArray[index] = Guideline Number
@@ -731,6 +770,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
         document.getElementById("pAlert").innerHTML = x < 2 ? x + " alert" : x + " alerts";
         document.getElementById("oAlert").innerHTML = x2 < 2 ? x2 + " alert" : x2 + " alerts";
         document.getElementById("rAlert").innerHTML = x4 < 2 ? x4 + " alert" : x4 + " alerts";
+
 
 		function pClick() {
 			var x = document.getElementById("perceive");
@@ -769,7 +809,6 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 			}
 		  }
 
-
           
           function rClick() {
 			var x = document.getElementById("robust");
@@ -783,15 +822,8 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 			  x.style.display = "none";
 			}
 		  }
-
-
-
-
     </script>
-
-
 </body>
-
 </html>
 `;
     }
