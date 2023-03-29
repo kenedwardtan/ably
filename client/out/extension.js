@@ -12,126 +12,143 @@ const node_1 = require("vscode-languageclient/node");
 let client;
 let receivedData;
 async function activate(context) {
-    const provider = new ColorsViewProvider(context.extensionUri);
-    // The server is implemented in node
-    const serverModule = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
-    // The debug options for the server
-    // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-    const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
-    // If the extension is launched in debug mode then the debug server options are used
-    // Otherwise the run options are used
-    const serverOptions = {
-        run: { module: serverModule, transport: node_1.TransportKind.ipc },
-        debug: {
-            module: serverModule,
-            transport: node_1.TransportKind.ipc,
-            options: debugOptions,
-        },
-    };
-    // Options to control the language client
-    const clientOptions = {
-        // Register the server for javascript documents
-        documentSelector: [{ scheme: 'file', language: 'html' },
-            { scheme: 'file', language: 'javascript' }],
-        synchronize: {
-            // Notify the server about file changes to 'all' files contained in the workspace
-            fileEvents: vscode_1.workspace.createFileSystemWatcher('**/*'),
-        },
-    };
-    // Create the language client and start the client.
-    client = new node_1.LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
-    //console.log("------ REFRESH -----");
-    client.start();
-    //client.sendNotification("custom/refreshClient", {});
-    let done = 1;
-    client.onReady().then(() => {
-        client.onNotification("custom/loadFiles", (files) => {
-            //console.log("loading files " + JSON.stringify(files));
-            // console.log(files);
-            receivedData = files[0];
-            // console.log(receivedData);
-            //const score = receivedData.pop();
-            // console.log(receivedData);
-            //console.log("SCORE "+score); // Output: 3
-            if (done != 2) {
-                context.subscriptions.push(vscode.window.registerWebviewViewProvider(ColorsViewProvider.viewType, provider));
-            }
-            done = 2;
-            provider.callView();
-        });
+  const provider = new ColorsViewProvider(context.extensionUri);
+  // The server is implemented in node
+  const serverModule = context.asAbsolutePath(
+    path.join("server", "out", "server.js")
+  );
+  // The debug options for the server
+  // --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
+  const debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
+  // If the extension is launched in debug mode then the debug server options are used
+  // Otherwise the run options are used
+  const serverOptions = {
+    run: { module: serverModule, transport: node_1.TransportKind.ipc },
+    debug: {
+      module: serverModule,
+      transport: node_1.TransportKind.ipc,
+      options: debugOptions,
+    },
+  };
+  // Options to control the language client
+  const clientOptions = {
+    // Register the server for javascript documents
+    documentSelector: [
+      { scheme: "file", language: "html" },
+      { scheme: "file", language: "css" },
+    ],
+    synchronize: {
+      // Notify the server about file changes to 'all' files contained in the workspace
+      fileEvents: vscode_1.workspace.createFileSystemWatcher(
+        vscode_1.window.activeTextEditor.document.uri.fsPath
+      ),
+    },
+  };
+  // Create the language client and start the client.
+  client = new node_1.LanguageClient(
+    "languageServerExample",
+    "Language Server Example",
+    serverOptions,
+    clientOptions
+  );
+  //console.log("------ REFRESH -----");
+  client.start();
+  //client.sendNotification("custom/refreshClient", {});
+  let done = 1;
+  client.onReady().then(() => {
+    client.onNotification("custom/loadFiles", (files) => {
+      //console.log("loading files " + JSON.stringify(files));
+      // console.log(files);
+      receivedData = files[0];
+      // console.log(receivedData);
+      //const score = receivedData.pop();
+      // console.log(receivedData);
+      //console.log("SCORE "+score); // Output: 3
+      if (done != 2) {
+        context.subscriptions.push(
+          vscode.window.registerWebviewViewProvider(
+            ColorsViewProvider.viewType,
+            provider
+          )
+        );
+      }
+      done = 2;
+      provider.callView();
     });
+  });
 }
 exports.activate = activate;
 let dataLength = 0;
 const TotalScore = 0;
 const tryArray = [];
 class ColorsViewProvider {
-    constructor(_extensionUri) {
-        this._extensionUri = _extensionUri;
-    }
-    resolveWebviewView(webviewView, context, _token) {
-        this._view = webviewView;
-        webviewView.webview.options = {
-            // Allow scripts in the webview
-            enableScripts: true,
-            localResourceRoots: [
-                this._extensionUri
-            ]
-        };
-        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-        //console.log(webviewView);
-        webviewView.webview.onDidReceiveMessage(data => {
-            switch (data.type) {
-                case 'colorSelected':
-                    {
-                        vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
-                        break;
-                    }
-            }
-        });
-    }
-    callView() {
-        this.updateView(this._view);
-    }
-    updateView(webviewView) {
-        //console.log("here");
-        this._view = webviewView;
-        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-    }
-    _getHtmlForWebview(webview) {
-        const score = receivedData.pop();
-        console.log("SCORE: " + score);
-        let messageArray = [];
-        messageArray = receivedData.map(item => item.relatedInformation[0].message);
-        let errorArray = [];
-        errorArray = receivedData.map(item => item.message);
-        let lineArray = [];
-        lineArray = receivedData.map(item => item.range.start.line + 1);
-        let wcagArray = [];
-        wcagArray = (receivedData.map(item => item.source));
-        let extractedValues = [];
-        extractedValues = wcagArray.map(item => {
-            const [, value] = item.split(" | ");
-            return value;
-        });
-        // console.log(extractedValues);
-        let finalArray = [];
-        finalArray = receivedData.map((item, index) => {
-            return `Line ${lineArray[index]}:  ${messageArray[index]}`;
-        });
-        /**finalArray.sort((a, b) => {
+  constructor(_extensionUri) {
+    this._extensionUri = _extensionUri;
+  }
+  resolveWebviewView(webviewView, context, _token) {
+    this._view = webviewView;
+    webviewView.webview.options = {
+      // Allow scripts in the webview
+      enableScripts: true,
+      localResourceRoots: [this._extensionUri],
+    };
+    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+    //console.log(webviewView);
+    webviewView.webview.onDidReceiveMessage((data) => {
+      switch (data.type) {
+        case "colorSelected": {
+          vscode.window.activeTextEditor?.insertSnippet(
+            new vscode.SnippetString(`#${data.value}`)
+          );
+          break;
+        }
+      }
+    });
+  }
+  callView() {
+    this.updateView(this._view);
+  }
+  updateView(webviewView) {
+    //console.log("here");
+    this._view = webviewView;
+    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+  }
+  _getHtmlForWebview(webview) {
+    const score = receivedData.pop();
+    console.log("SCORE: " + score);
+    let messageArray = [];
+    messageArray = receivedData.map(
+      (item) => item.relatedInformation[0].message
+    );
+    let errorArray = [];
+    errorArray = receivedData.map((item) => item.message);
+    let lineArray = [];
+    lineArray = receivedData.map((item) => item.range.start.line + 1);
+    let wcagArray = [];
+    wcagArray = receivedData.map((item) => item.source);
+    let extractedValues = [];
+    extractedValues = wcagArray.map((item) => {
+      const [, value] = item.split(" | ");
+      return value;
+    });
+    // console.log(extractedValues);
+    let finalArray = [];
+    finalArray = receivedData.map((item, index) => {
+      return `Line ${lineArray[index]}:  ${messageArray[index]}`;
+    });
+    /**finalArray.sort((a, b) => {
             const lineA = a.match(/Line (\d+)/)[1];
             const lineB = b.match(/Line (\d+)/)[1];
             return lineA - lineB;
         });**/
-        let stringArray = "";
-        stringArray = finalArray.join(' + ');
-        let guidelinesString = "";
-        guidelinesString = extractedValues.join(' + ');
-        console.log(stringArray);
-        dataLength = receivedData.length;
-        console.log(receivedData);
-        return `
+    let stringArray = "";
+    stringArray = finalArray.join(" + ");
+    let guidelinesString = "";
+    guidelinesString = extractedValues.join(" + ");
+    console.log(stringArray);
+    dataLength = receivedData.length;
+    console.log(receivedData);
+    return `
 		<!DOCTYPE html>
 <html>
 
@@ -725,14 +742,14 @@ class ColorsViewProvider {
 
 </html>
 `;
-    }
+  }
 }
-ColorsViewProvider.viewType = 'calicoColors.colorsView';
+ColorsViewProvider.viewType = "calicoColors.colorsView";
 function deactivate() {
-    if (!client) {
-        return undefined;
-    }
-    return client.stop();
+  if (!client) {
+    return undefined;
+  }
+  return client.stop();
 }
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map
