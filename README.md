@@ -31,7 +31,7 @@ The current page shows an existing HTML with pre-written _inaccessible_ code. Le
 
 Figure 2. Labeled sections in the sample environment
 
-The orange arrows direct to lines that are linted. In this case, there are four (4) lines that show underlines underneath, indicating that they are inaccessible. This is then related to the warning report at the bottom which show what **accessibility guideline is violated**, which **line and column** do they occur (indicated by the lint), and a **suggestion** on how to resolve the violation. At the left, there is a sidebar that indicates the inaccessible code, the line where it occurs, the same suggestion in the warning report, and the score indicated inside the colored box.
+As seen inside the purple box, linted lines—those with accessibility violations—are marked by a yellow underline. This is then related to the warning report at the bottom, marked with a blue box, showing which **accessibility guideline/s are violated**, which **line and column** do they occur (indicated by the lint), and a **suggestion** on how to resolve the violation. Then finally, on the left-hand side, is a sidebar that shows the number of inaccessible code, lists all suggestions, and displays the code's overall accessibility score.
 
 ### Linting
 
@@ -39,7 +39,7 @@ The orange arrows direct to lines that are linted. In this case, there are four 
 
 Figure 3. Linted code with its corresponding warning
 
-This is what linting looks like. It's a jagged line underneath a line of code that violates the accessibility guidelines. Each line corresponds to a warning that's indicated below. These warnings occur in the same order as the violated code, meaning from top to bottom.
+This is what linting looks like. A yellow jagged underline marks each line of code that violates the accessibility guidelines. Each line corresponds to a warning that's indicated below. These warnings occur in the same order as the violated code, meaning from top to bottom.
 
 ### AB.LY Sidebar
 
@@ -47,7 +47,7 @@ This is what linting looks like. It's a jagged line underneath a line of code th
 
 Figure 4. AB.LY sidebar
 
-This is what the sidebar looks like.
+This is what the sidebar looks like. At the top-right corner, is the code's overall accessibility score percentage. Then, the rest of the sidebar is used to display all suggestions which are segregated into four categories based on WCAG 2.1: Perceivable, Operable, Understandable, and Robust.
 
 ## Others
 
