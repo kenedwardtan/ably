@@ -417,7 +417,7 @@ class ColorsViewProvider {
     <div class="content">
         <div class="title-sec">
             <div class="logo">
-            <img src="https://tinypic.host/images/2023/03/26/ABLY_LogoPrimary3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
+            <img src="https://i.ibb.co/h1MSWN9/ABLY-Logo-Primary-3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
                 <p class="title-name"> Ab.ly </p>
                 <div class="ably-score">
                     <div class="ably-score-circle">
