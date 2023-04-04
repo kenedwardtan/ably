@@ -21,13 +21,13 @@ There are two features that you want to focus your attention on when using this 
 
 Since you've successfully installed this extension, let's introduce what your environment should look like.
 
-!["sample environment in vscode"](images/ably01.png)
+!["sample environment in vscode"](https://i.ibb.co/mXjXDBk/ably01.png)
 
 Figure 1. Sample environment in VSCode
 
 The current page shows an existing HTML with pre-written _inaccessible_ code. Let's mark each section that needs attention.
 
-!["labeled sections in the sample environment"](images/ably02.png)
+!["labeled sections in the sample environment"](https://i.ibb.co/php7Kz3/ably02.png)
 
 Figure 2. Labeled sections in the sample environment
 
@@ -35,7 +35,7 @@ As seen inside the purple box, linted lines—those with accessibility violation
 
 ### Linting
 
-!["lint example and its corresponding warning"](images/ably03.png)
+!["lint example and its corresponding warning"](https://i.ibb.co/HNQpzSW/ably03.png)
 
 Figure 3. Linted code with its corresponding warning
 
@@ -43,7 +43,7 @@ This is what linting looks like. A yellow jagged underline marks each line of co
 
 ### AB.LY Sidebar
 
-!["ab.ly sidebar contents"](images/ably04.png)
+!["ab.ly sidebar contents"](https://i.ibb.co/6y0zY2Y/ably04.png)
 
 Figure 4. AB.LY sidebar
 
