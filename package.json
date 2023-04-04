@@ -1,7 +1,7 @@
 {
   "name": "ably-ext",
   "description": "Ably extension",
-  "icon": "images/ably128.png",
+  "icon": "assets/ably128.png",
   "author": "THS-ST2 Camarillo, Finez, Olalia, Tan",
   "license": "MIT",
   "version": "1.1.0",
