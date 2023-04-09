@@ -256,22 +256,22 @@ class ColorsViewProvider {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
-            background-color: #f2f0f1;
+            background-color: #2ecc71;
         }
 
         .ably-score-value {
             font-size: 14px;
-            font-weight: bold;
-            color: #e22f65;
+            font-weight: 800;
+            color: black;
         }
 
         .ably-score-label {
             display: block;
             font-size: 8px;
-            color: #999;
+            color: black;
             text-align: center;
             margin-top: 5px;
         }
@@ -417,11 +417,11 @@ class ColorsViewProvider {
     <div class="content">
         <div class="title-sec">
             <div class="logo">
-            <img src="https://tinypic.host/images/2023/03/26/ABLY_LogoPrimary3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
+            <img src="https://i.ibb.co/h1MSWN9/ABLY-Logo-Primary-3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
                 <p class="title-name"> Ab.ly </p>
                 <div class="ably-score">
                     <div class="ably-score-circle">
-                        <span class="ably-score-value">1</span> <span style="color: #e22f65; font-size: 8px">%</span>
+                        <span class="ably-score-value">1</span> <span style="color:black; font-size: 12px">%</span>
                     </div>
             </div>
             </div>
@@ -555,6 +555,22 @@ class ColorsViewProvider {
 
         // Final Score Percentage
         let scorePercent = 100 - Math.round((ErrorTotal / totalScore) * 100);
+        if (scorePercent < 0) {
+        scorePercent = 0;
+        }
+
+        const scoreCircle = document.querySelector('.ably-score-circle');
+
+
+        if (scorePercent >= 71) {
+            scoreCircle.style.backgroundColor = '#02BA00'; // Green
+        } else if (scorePercent >= 30 && scorePercent <= 70) {
+            scoreCircle.style.backgroundColor = '#FFCF02'; 
+        } else {
+            scoreCircle.style.backgroundColor = '#FF1E0E'; 
+        }
+
+        
 
         console.log(scorePercent);
 
