@@ -1,5 +1,5 @@
 {
-  "name": "ABLY",
+  "name": "ably",
   "description": "Ably extension",
   "icon": "assets/ably128.png",
   "author": "THS-ST2 Camarillo, Finez, Olalia, Tan",
@@ -74,7 +74,7 @@
     "compile": "tsc -watch -p ./",
     "watch": "tsc -b -w",
     "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
-    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "postinstall": "cd client && npm install && cd ..",
     "test": "sh ./scripts/e2e.sh"
   },
   "devDependencies": {
