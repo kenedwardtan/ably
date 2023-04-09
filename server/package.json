@@ -4,7 +4,7 @@
 	"version": "1.0.0",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
-	"main": "dist/server.js",
+	"main": "out/server.js",
 	"engines": {
 		"node": "*"
 	},
