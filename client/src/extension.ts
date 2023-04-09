@@ -73,7 +73,7 @@ export async function activate(context: vscode.ExtensionContext) {
             //console.log("loading files " + JSON.stringify(files));
            // console.log(files);
             receivedData = files[0];
-            console.log(receivedData);
+            // console.log(receivedData);
 
             //const score = receivedData.pop();
            // console.log(receivedData);
@@ -159,7 +159,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 
     private _getHtmlForWebview(webview: vscode.Webview) {
         const score = receivedData.pop();
-        console.log("SCORE: " + score);
+        // console.log("SCORE: " + score);
 
         let messageArray = [];
         messageArray = receivedData.map(item => item.relatedInformation[0].message);
@@ -196,10 +196,10 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
         guidelinesString = extractedValues.join(' + ');
 
         
-        console.log(stringArray);
+        // console.log(stringArray);
         dataLength = receivedData.length;
     
-        console.log(receivedData); 
+        //console.log(receivedData); 
 
         return `
 		<!DOCTYPE html>

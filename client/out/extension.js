@@ -49,7 +49,7 @@ async function activate(context) {
             //console.log("loading files " + JSON.stringify(files));
             // console.log(files);
             receivedData = files[0];
-            console.log(receivedData);
+            // console.log(receivedData);
             //const score = receivedData.pop();
             // console.log(receivedData);
             //console.log("SCORE "+score); // Output: 3
@@ -101,7 +101,7 @@ class ColorsViewProvider {
     }
     _getHtmlForWebview(webview) {
         const score = receivedData.pop();
-        console.log("SCORE: " + score);
+        // console.log("SCORE: " + score);
         let messageArray = [];
         messageArray = receivedData.map(item => item.relatedInformation[0].message);
         let errorArray = [];
@@ -129,9 +129,9 @@ class ColorsViewProvider {
         stringArray = finalArray.join(' + ');
         let guidelinesString = "";
         guidelinesString = extractedValues.join(' + ');
-        console.log(stringArray);
+        // console.log(stringArray);
         dataLength = receivedData.length;
-        console.log(receivedData);
+        //console.log(receivedData); 
         return `
 		<!DOCTYPE html>
 <html>
@@ -417,7 +417,7 @@ class ColorsViewProvider {
     <div class="content">
         <div class="title-sec">
             <div class="logo">
-            <img src="https://i.ibb.co/h1MSWN9/ABLY-Logo-Primary-3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
+            <img src="https://tinypic.host/images/2023/03/26/ABLY_LogoPrimary3x.png" alt="Ably logo.png" border="0" style="width: 1em"/>
                 <p class="title-name"> Ab.ly </p>
                 <div class="ably-score">
                     <div class="ably-score-circle">
@@ -718,7 +718,7 @@ class ColorsViewProvider {
 			var x = document.getElementById("operable");
 
 			if (x.style.display === "none") {
-                document.getElementById("rchevDown").style.transform="rotate(180deg)"
+                document.getElementById("ochevDown").style.transform="rotate(180deg)"
 
 			  x.style.display = "";
 			} else {
