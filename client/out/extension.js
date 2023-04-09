@@ -718,7 +718,7 @@ class ColorsViewProvider {
 			var x = document.getElementById("operable");
 
 			if (x.style.display === "none") {
-                document.getElementById("rchevDown").style.transform="rotate(180deg)"
+                document.getElementById("ochevDown").style.transform="rotate(180deg)"
 
 			  x.style.display = "";
 			} else {
