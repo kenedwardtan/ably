@@ -1,10 +1,10 @@
 {
-  "name": "ably",
+  "name": "ABLY",
   "description": "Ably extension",
   "icon": "assets/ably128.png",
   "author": "THS-ST2 Camarillo, Finez, Olalia, Tan",
   "license": "MIT",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/kenedwardtan/ably"
