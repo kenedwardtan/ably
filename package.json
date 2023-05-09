@@ -74,9 +74,7 @@
     "compile": "tsc -watch -p ./",
     "watch": "tsc -b -w",
     "lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
-    "prepostinstall": "cp ./server/out/server.js ./server/out/server.js.bak",
     "postinstall": "cd client && npm install && cd .. && cd server && npm install && cd ..",
-    "postpostinstall": "cp ./server/out/server.js.bak ./server/out/server.js",
     "test": "sh ./scripts/e2e.sh"
   },
   "devDependencies": {
